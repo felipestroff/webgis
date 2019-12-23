@@ -8,7 +8,7 @@
         <title>WebGIS</title>  
     </head>
     <body>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <span class="navbar-brand mb-0 h1">WebGIS</span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#tools" aria-controls="tools" aria-expanded="false" aria-label="Exibir Ferramentas">
                 <span class="navbar-toggler-icon"></span>
@@ -16,11 +16,17 @@
 
             <div class="collapse navbar-collapse" id="tools">
                 <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item tool" title="Gestão" data-tooltip="true">
+                        <i class="material-icons">build</i>
+                    </li>
+                    <li class="list-group-item tool" title="Notificações" data-tooltip="true">
+                        <i class="material-icons">notifications_none</i>
+                    </li>
                     <li class="list-group-item tool" title="Visualização padrão" data-tooltip="true">
                         <i class="material-icons">home</i>
                     </li>
                     <li class="list-group-item tool" title="Exibir informações" data-tooltip="true">
-                        <i class="material-icons">info</i>
+                        <i class="material-icons">info_outline</i>
                     </li>
                     <li class="list-group-item tool" title="Camadas base" data-tooltip="true">
                         <i class="material-icons">layers</i>
@@ -28,7 +34,7 @@
                     <div class="dropdown">
                         <li class="list-group-item tool" title="Seleção" data-tooltip="true" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">tab_unselected</i>
-                            <div class="dropdown-menu">
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
                                 <button class="dropdown-item" type="button">
                                     Única
                                 </button>
@@ -47,7 +53,7 @@
                     <div class="dropdown">
                         <li class="list-group-item tool" title="Medir" data-tooltip="true" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">square_foot</i>
-                            <div class="dropdown-menu">
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
                                 <button class="dropdown-item" type="button">
                                     Distância
                                 </button>
@@ -60,7 +66,7 @@
                     <div class="dropdown">
                         <li class="list-group-item tool" title="Desenhar" data-tooltip="true" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">brush</i>
-                            <div class="dropdown-menu">
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
                                 <button class="dropdown-item" type="button">
                                     Ponto
                                 </button>
@@ -78,6 +84,28 @@
                     </div>
                     <li class="list-group-item tool" title="Impressão" data-tooltip="true">
                         <i class="material-icons">print</i>
+                    </li>
+                    <div class="dropdown">
+                        <li class="list-group-item tool" title="Rótulos" data-tooltip="true" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">label_outline</i>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
+                                <button class="dropdown-item" type="button">
+                                    Ponto
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    Linha
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    Polígono
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    Círculo
+                                </button>
+                            </div>
+                        </li>
+                    </div>
+                    <li class="list-group-item tool" title="Legendas" data-tooltip="true">
+                        <i class="material-icons">format_list_bulleted</i>
                     </li>
                 </ul>
             </div>

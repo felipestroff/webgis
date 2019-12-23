@@ -1,8 +1,12 @@
 $(function () {
+    // * Tooltips
+    // ? HTML Elements must be data-tooltip attribute set to TRUE
     $('[data-tooltip="true"]').tooltip();
   })
 
 // * Controls
+var attribution = new ol.control.Attribution();
+
 var zoomslider = new ol.control.ZoomSlider();
 
 var mousePosition = new ol.control.MousePosition({
@@ -15,7 +19,9 @@ var mousePosition = new ol.control.MousePosition({
 var scaleLine = new ol.control.ScaleLine();
 
 var map = new ol.Map({
-    controls: ol.control.defaults().extend([
+    controls: ol.control.defaults({
+        attribution: false
+    }).extend([
         zoomslider,
         mousePosition,
         scaleLine
