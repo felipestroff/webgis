@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/css/ol.css" type="text/css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="style.css" type="text/css">
+        <title>WebGIS</title>  
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">WebGIS</span>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#tools" aria-controls="tools" aria-expanded="false" aria-label="Exibir Ferramentas">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="tools">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item tool" title="Visualização padrão" data-tooltip="true">
+                        <i class="material-icons">home</i>
+                    </li>
+                    <li class="list-group-item tool" title="Exibir informações" data-tooltip="true">
+                        <i class="material-icons">info</i>
+                    </li>
+                    <li class="list-group-item tool" title="Camadas base" data-tooltip="true">
+                        <i class="material-icons">layers</i>
+                    </li>
+                    <div class="dropdown">
+                        <li class="list-group-item tool" title="Seleção" data-tooltip="true" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">tab_unselected</i>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" type="button">
+                                    Única
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    Múltipla
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    Editar
+                                </button>
+                            </div>
+                        </li>
+                    </div>
+                    <li class="list-group-item tool" title="Calculadora de coordenadas" data-tooltip="true">
+                        <i class="material-icons">keyboard</i>
+                    </li>
+                    <div class="dropdown">
+                        <li class="list-group-item tool" title="Medir" data-tooltip="true" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">square_foot</i>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" type="button">
+                                    Distância
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    Área
+                                </button>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="dropdown">
+                        <li class="list-group-item tool" title="Desenhar" data-tooltip="true" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">brush</i>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" type="button">
+                                    Ponto
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    Linha
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    Polígono
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    Círculo
+                                </button>
+                            </div>
+                        </li>
+                    </div>
+                    <li class="list-group-item tool" title="Impressão" data-tooltip="true">
+                        <i class="material-icons">print</i>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="map"></div>
+
+        <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+        <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/build/ol.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="app.js" type="text/javascript"></script>
+    </body>
+</html>

@@ -1,0 +1,68 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+html, body, #map {
+    height: 100%;
+    width: 100%;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    padding-top: 56px;
+}
+
+.ol-zoom .ol-zoom-out {
+    margin-top: 204px;
+}
+
+.ol-zoomslider {
+    background-color: transparent;
+    top: 2.3em;
+}
+
+.ol-touch .ol-zoom .ol-zoom-out {
+    margin-top: 212px;
+}
+
+.ol-touch .ol-zoomslider {
+    top: 2.75em;
+}
+
+.ol-zoom-in.ol-has-tooltip:hover [role=tooltip],
+.ol-zoom-in.ol-has-tooltip:focus [role=tooltip] {
+    top: 3px;
+}
+
+.ol-zoom-out.ol-has-tooltip:hover [role=tooltip],
+.ol-zoom-out.ol-has-tooltip:focus [role=tooltip] {
+    top: 232px;
+}
+
+.custom-mouse-position {
+    position: absolute;
+    top: .5em;
+    right: .5em;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: #fff;
+    background-color: rgba(0,60,136,.5);
+    border-radius: 2px 2px 0 0;
+}
+
+#tools {
+    z-index: 1;
+}
+
+.tool {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.tool:hover {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
