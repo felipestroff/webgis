@@ -37,6 +37,7 @@ var map = new ol.Map({
     target: 'map',
     layers: [
         new ol.layer.Tile({
+            type: 'basemap',
             source: new ol.source.OSM()
         })
     ],
@@ -51,6 +52,49 @@ function closePopup() {
     popupOverlay.setPosition(undefined);
     this.blur();
     return false;
+}
+
+// Layers
+function clearBasemap(target) {
+
+    $('.dropdown-item-basemap').removeClass('active');
+    $(target).addClass('active');
+
+    map.getLayers().forEach(function (layer) {
+        if (layer.get('type') === 'basemap') {
+            map.removeLayer(layer);
+        }
+    });
+}
+
+function setBasemap(target, type, style) {
+
+    clearBasemap();
+    
+    var source;
+
+    if (type === 'osm') {
+        source = new ol.source.OSM({
+            crossOrigin: 'anonymous'
+        });
+    }
+    else {
+        source = new ol.source.BingMaps({
+            key: 'Agl-rpGco3Mo07n16sDpY4jsu35RAbvEwPAND7hi8-6JgIFVetQdhnZ4i_oSiNyd',
+            imagerySet: style,
+            crossOrigin: 'anonymous'
+        });
+    }
+
+    map.addLayer(
+        new ol.layer.Tile({
+            type: 'basemap',
+            source: source
+        })
+    );
+
+    $('.dropdown-item-basemap').removeClass('active');
+    $(target).addClass('active');
 }
 
 // Zooms

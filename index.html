@@ -18,21 +18,45 @@
             <!-- Tools -->
             <div class="collapse navbar-collapse" id="tools">
                 <ul class="list-group list-group-horizontal">
-                    <li class="list-group-item tool" title="Gestão">
+                    <!--<li class="list-group-item tool" title="Gestão">
                         <i class="material-icons">build</i>
-                    </li>
-                    <li class="list-group-item tool" title="Notificações">
+                    </li>-->
+                    <!--<li class="list-group-item tool" title="Notificações">
                         <i class="material-icons">notifications_none</i>
-                    </li>
+                    </li>-->
                     <li onclick="zoomGoto()" class="list-group-item tool" title="Visualização padrão">
                         <i class="material-icons">home</i>
                     </li>
                     <li onclick="enableIdentify(this)" class="list-group-item tool" title="Exibir informações">
                         <i class="material-icons">info_outline</i>
                     </li>
-                    <li class="list-group-item tool" title="Camadas base">
-                        <i class="material-icons">layers</i>
-                    </li>
+                    <div class="dropdown">
+                        <li class="list-group-item tool" title="Camadas base" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">layers</i>
+                            <ul class="dropdown-menu dropdown-menu-left dropdown-menu-lg-left">
+                                <button onclick="clearBasemap(this)" class="dropdown-item dropdown-item-basemap" type="button">
+                                    <img src="images/none.jpg" class="rounded-circle img-basemap">
+                                    Nenhum
+                                </button>
+                                <button onclick="setBasemap(this, 'bing', 'Aerial')" class="dropdown-item dropdown-item-basemap" type="button">
+                                    <img src="images/bing-aerial.jpg" class="rounded-circle img-basemap">
+                                    Bing Aerial
+                                </button>
+                                <button onclick="setBasemap(this, 'bing', 'AerialWithLabels')" class="dropdown-item dropdown-item-basemap" type="button">
+                                    <img src="images/bing-aerial-labels.jpg" class="rounded-circle img-basemap">
+                                    Bing Aerial (rótulos)
+                                </button>
+                                <button onclick="setBasemap(this, 'bing', 'RoadOnDemand')" class="dropdown-item dropdown-item-basemap" type="button">
+                                    <img src="images/bing-road.jpg" class="rounded-circle img-basemap">
+                                    Bing Road
+                                </button>
+                                <button onclick="setBasemap(this, 'osm')" class="dropdown-item dropdown-item-basemap active" type="button">
+                                    <img src="images/osm.jpg" class="rounded-circle img-basemap">
+                                    OpenStreepMap
+                                </button>
+                            </ul>
+                        </li>
+                    </div>
                     <div class="dropdown">
                         <li class="list-group-item tool" title="Seleção" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">tab_unselected</i>
@@ -49,9 +73,9 @@
                             </ul>
                         </li>
                     </div>
-                    <li class="list-group-item tool" title="Calculadora de coordenadas">
+                    <!--<li class="list-group-item tool" title="Calculadora de coordenadas">
                         <i class="material-icons">keyboard</i>
-                    </li>
+                    </li>-->
                     <div class="dropdown">
                         <li class="list-group-item tool" title="Medir" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">square_foot</i>
@@ -92,12 +116,32 @@
                             <i class="material-icons">remove_red_eye</i>
                             <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-right pl-4">
                                 <li class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="labelsSwitch">
+                                    <input type="checkbox" class="custom-control-input" id="labelsSwitch" checked>
                                     <label class="custom-control-label" for="labelsSwitch">Rótulos</label>
                                 </li>
                                 <li class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="popupsSwitch">
+                                    <input type="checkbox" class="custom-control-input" id="popupsSwitch" checked>
                                     <label class="custom-control-label" for="popupsSwitch">Pop-ups</label>
+                                </li>
+                                <li class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="layersSwitch" checked>
+                                    <label class="custom-control-label" for="layersSwitch">Camadas</label>
+                                </li>
+                                <li class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="markersSwitch" checked>
+                                    <label class="custom-control-label" for="markersSwitch">Marcadores</label>
+                                </li>
+                                <li class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="pointsSwitch" checked>
+                                    <label class="custom-control-label" for="pointsSwitch">Pontos</label>
+                                </li>
+                                <li class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="filesSwitch" checked>
+                                    <label class="custom-control-label" for="filesSwitch">Arquivos</label>
+                                </li>
+                                <li class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="tipsSwitch" checked>
+                                    <label class="custom-control-label" for="tipsSwitch">Dicas</label>
                                 </li>
                             </ul>
                         </li>

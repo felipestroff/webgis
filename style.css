@@ -28,6 +28,17 @@ html, body, #map {
     border-color: #007bff;
 }
 
+.dropdown .list-group-item {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.img-basemap {
+    width: 30px;
+}
+
 /** OpenLayers styles */ 
 
 /* Zoom */
