@@ -114,10 +114,16 @@
 
         <!-- Popup -->
         <div id="popup" class="ol-popup d-none">
-            <a onclick="closePopup()" href="#" id="popup-closer" class="ol-popup-closer">
+            <a onclick="zoomToCoords(this)" href="#" title="Zoom para" id="popup-zoom" class="ol-popup-zoom">
+                <i class="material-icons">zoom_in</i>
+            </a>
+            <a onclick="copyCoords()" href="#" title="Copiar Coordenadas" id="popup-copy" class="ol-popup-copy">
+                <i class="material-icons">insert_drive_file</i>
+            </a>
+            <a onclick="closePopup()" href="#" title="Fechar" id="popup-closer" class="ol-popup-closer">
                 <i class="material-icons">close</i>
             </a>
-            <div id="popup-content"></div>
+            <div id="popup-content" class="ol-popup-content"></div>
         </div>
 
         <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->

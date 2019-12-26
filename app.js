@@ -4,7 +4,7 @@ var attribution = new ol.control.Attribution();
 var zoomslider = new ol.control.ZoomSlider();
 
 var mousePosition = new ol.control.MousePosition({
-    coordinateFormat: ol.coordinate.createStringXY(4),
+    coordinateFormat: ol.coordinate.createStringXY(6),
     projection: 'EPSG:4326',
     className: 'custom-mouse-position',
     undefinedHTML: ' '
@@ -98,13 +98,32 @@ function identify(event) {
 
 function identifyPoint(coordinates) {
 
-    var formated = ol.coordinate.format(coordinates, '{y}, {x}', 5);
+    var formated = ol.coordinate.format(coordinates, '{x}, {y}', 3);
+
+    $('#popup-zoom').data('coordinates', coordinates);
 
     document.getElementById('popup-content').innerHTML =
-        '<div>' +
-            '<label style="margin-right: 5px;">Coordenadas:</label>' +
-            '<input type="text" value="' + formated + '" class="input-code" readonly>' +
+        '<div class="input-group input-group-sm">' +
+            '<div class="input-group-prepend">' +
+                '<div class="input-group-text">Coordenadas:</div>' +
+            '</div>' +
+            '<input type="text" value="' + formated + '" id="popup-coordinates" class="form-control">' +
         '</div>';
 
     document.getElementById('popup').classList.remove('d-none');
+}
+
+function zoomToCoords(target) {
+    var coordinates = $(target).data('coordinates');
+    var lat = parseFloat(coordinates[0]);
+    var lon = parseFloat(coordinates[1]);
+    var coordinate = ol.proj.transform([lat, lon], 'EPSG:4326', 'EPSG:3857');
+    closePopup();
+    viewCenter(coordinate, 2000, 15);
+}
+
+function copyCoords() {
+    var copyText = document.getElementById('popup-coordinates');
+    copyText.select();
+    document.execCommand('Copy');
 }

@@ -98,11 +98,29 @@ html, body, #map {
 
 }
 
+.ol-popup-zoom {
+    text-decoration: none;
+    position: absolute;
+    top: 2px;
+    right: 65px;
+}
+
+.ol-popup-copy {
+    text-decoration: none;
+    position: absolute;
+    top: 2px;
+    right: 35px;
+}
+
 .ol-popup-closer {
     text-decoration: none;
     position: absolute;
     top: 2px;
-    right: 8px;
+    right: 5px;
+}
+
+.ol-popup-content {
+    padding-top: 20px;
 }
 
 /* Mouse position */
