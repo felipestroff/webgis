@@ -158,3 +158,12 @@ html, body, #map {
     background-color: rgba(0,60,136,.5);
     border-radius: 2px 2px 0 0;
 }
+
+/* Overviewmap */
+.ol-overviewmap {
+    bottom: 2.5em;
+}
+
+.ol-overviewmap-box {
+    border: 2px dotted rgba(255,255,255,.7);
+}

@@ -42,13 +42,25 @@ var map = new ol.Map({
             projection: 'EPSG:4326',
             className: 'custom-mouse-position',
             undefinedHTML: ' '
+        }),
+        new ol.control.OverviewMap({
+            tipLabel: 'Mapa geral',
+            rotateWithView: true,
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.TileArcGISRest({
+                        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+                        crossOrigin: 'anonymous'
+                    })
+                })
+            ]
         })
     ]),
     overlays: [
         popupOverlay
     ],
     interactions: ol.interaction.defaults().extend([
-        new ol.interaction.DragRotateAndZoom()
+        // TODO
     ]),
     layers: [
         new ol.layer.Tile({
@@ -63,9 +75,13 @@ var map = new ol.Map({
     })
 });
 
-// * Map Events
+// * Events
 map.on('pointermove', function (event) {
     tooltip.setPosition(event.coordinate);
+});
+
+dragBox.on('boxend', function() {
+    map.removeOverlay(tooltip);
 });
 
 // * Functions
