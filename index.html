@@ -10,26 +10,27 @@
     <body>
         <!-- Navbar -->
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <span class="navbar-brand mb-0 h1">WebGIS</span>
+            <span class="navbar-brand">WebGIS</span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#tools" aria-controls="tools" aria-expanded="false" aria-label="Exibir Ferramentas">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <!-- Tools -->
-            <div class="collapse navbar-collapse" id="tools">
-                <ul class="list-group list-group-horizontal">
-                    <!--<li class="list-group-item tool" title="Gestão">
+            <div class="collapse navbar-collapse justify-content-between" id="tools">
+                <ul class="navbar-nav list-group list-group-horizontal">
+                    <li class="list-group-item tool" title="Gestão">
                         <i class="material-icons">build</i>
-                    </li>-->
-                    <!--<li class="list-group-item tool" title="Notificações">
+                    </li>
+                    <li class="list-group-item tool" title="Notificações">
                         <i class="material-icons">notifications_none</i>
-                    </li>-->
+                    </li>
                     <li onclick="zoomGoto()" class="list-group-item tool" title="Visualização padrão">
                         <i class="material-icons">home</i>
                     </li>
                     <li onclick="enableIdentify(this)" class="list-group-item tool" title="Exibir informações">
                         <i class="material-icons">info_outline</i>
                     </li>
+                    <!-- Basemaps -->
                     <div class="dropdown">
                         <li class="list-group-item tool" title="Camadas base" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">layers</i>
@@ -73,9 +74,9 @@
                             </ul>
                         </li>
                     </div>
-                    <!--<li class="list-group-item tool" title="Calculadora de coordenadas">
+                    <li class="list-group-item tool" title="Calculadora de coordenadas">
                         <i class="material-icons">keyboard</i>
-                    </li>-->
+                    </li>
                     <div class="dropdown">
                         <li class="list-group-item tool" title="Medir" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">square_foot</i>
@@ -149,6 +150,28 @@
                     <li class="list-group-item tool" title="Legendas">
                         <i class="material-icons">format_list_bulleted</i>
                     </li>
+                </ul>
+
+                <!-- Login -->
+                <ul class="navbar-nav text-right">
+                    <div class="dropdown">
+                        <li class="nav-item" title="Login" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link" href="#">
+                                <i class="material-icons">person</i>
+                            </a>
+                        </li>
+                        <form class="dropdown-menu p-4">
+                            <div class="form-group">
+                                <label for="userEmail">Email</label>
+                                <input type="email" class="form-control" id="userEmail" placeholder="email@exemplo.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="userPassword">Senha</label>
+                                <input type="password" class="form-control" id="userPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Entrar</button>
+                        </form>
+                    </div>
                 </ul>
             </div>
         </nav>
