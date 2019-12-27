@@ -1,16 +1,25 @@
-// * Controls
-var attribution = new ol.control.Attribution();
+// * Sources
+var source = new ol.source.Vector();
 
-var zoomslider = new ol.control.ZoomSlider();
-
-var mousePosition = new ol.control.MousePosition({
-    coordinateFormat: ol.coordinate.createStringXY(6),
-    projection: 'EPSG:4326',
-    className: 'custom-mouse-position',
-    undefinedHTML: ' '
+// * Interactions
+var select = new ol.interaction.Select({
+    condition: ol.events.condition.click,
+    multi: true
 });
 
-var scaleLine = new ol.control.ScaleLine();
+var modify = new ol.interaction.Modify({
+    source: source
+});
+
+var dragBox = new ol.interaction.DragBox();
+
+// * Tooltips
+var tooltip = new ol.Overlay({
+    element: document.getElementById('tooltip'),
+    offset: [0, -15],
+    positioning: 'bottom-center',
+    className: 'ol-tooltip'
+});
 
 // * Overlays
 var popupOverlay = new ol.Overlay({
@@ -21,30 +30,42 @@ var popupOverlay = new ol.Overlay({
     }
 });
 
-
 // * Map
 var map = new ol.Map({
     controls: ol.control.defaults({
         attribution: false
     }).extend([
-        zoomslider,
-        mousePosition,
-        scaleLine
+        new ol.control.ZoomSlider(),
+        new ol.control.ScaleLine(),
+        new ol.control.MousePosition({
+            coordinateFormat: ol.coordinate.createStringXY(6),
+            projection: 'EPSG:4326',
+            className: 'custom-mouse-position',
+            undefinedHTML: ' '
+        })
     ]),
     overlays: [
         popupOverlay
     ],
-    target: 'map',
+    interactions: ol.interaction.defaults().extend([
+        new ol.interaction.DragRotateAndZoom()
+    ]),
     layers: [
         new ol.layer.Tile({
             type: 'basemap',
             source: new ol.source.OSM()
         })
     ],
+    target: 'map',
     view: new ol.View({
         center: ol.proj.fromLonLat([-53, -30.5]),
         zoom: 7
     })
+});
+
+// * Map Events
+map.on('pointermove', function (event) {
+    tooltip.setPosition(event.coordinate);
 });
 
 // * Functions
@@ -114,11 +135,11 @@ function viewCenter(coordinate, duration, zoom) {
 // Identify
 function enableIdentify(target) {
     if (target.classList.contains('active')) {
-        target.classList.remove('active');
-        document.getElementById('map').style.cursor = 'default';
-        map.un('singleclick', identify);
+        removeInteractions();
     }
     else {
+        removeInteractions();
+
         target.classList.add('active');
         document.getElementById('map').style.cursor = 'help';
         map.on('singleclick', identify);
@@ -170,4 +191,89 @@ function copyCoords() {
     var copyText = document.getElementById('popup-coordinates');
     copyText.select();
     document.execCommand('Copy');
+}
+
+// Selects
+// Unique
+function enableSelect(target) {
+    if (target.classList.contains('active')) {
+        removeInteractions();
+    }
+    else {
+        removeInteractions();
+
+        target.classList.add('active');
+        // Parent
+        $(target).closest('li').addClass('active');
+        
+        document.getElementById('map').style.cursor = 'pointer';
+        map.addInteraction(select);
+
+        createTooltip('Clique em uma feição');
+    }
+}
+
+// Multiple
+function enableMultiSelect(target) {
+    if (target.classList.contains('active')) {
+        removeInteractions();
+    }
+    else {
+        removeInteractions();
+
+        target.classList.add('active');
+        // Parent
+        $(target).closest('li').addClass('active');
+        
+        document.getElementById('map').style.cursor = 'grab';
+        map.addInteraction(select);
+        map.addInteraction(dragBox);
+
+        createTooltip('Clique e arraste para selecionar feições');
+    }
+}
+
+// Edit
+function enableEdit(target) {
+    if (target.classList.contains('active')) {
+        removeInteractions();
+    }
+    else {
+        removeInteractions();
+
+        target.classList.add('active');
+        // Parent
+        $(target).closest('li').addClass('active');
+        
+        map.addInteraction(modify);
+
+        createTooltip('Clique em uma feição para editar');
+    }
+}
+
+// Utils
+function createTooltip(html) {
+
+    tooltip.element.innerHTML = html;
+
+    map.addOverlay(tooltip);
+
+    tooltip.element.classList.remove('d-none');
+}
+
+function removeInteractions() {
+
+    $('.tool, .dropdown-item').removeClass('active');
+
+    document.getElementById('map').style.cursor = 'default';
+
+    map.removeInteraction(select);
+    map.removeInteraction(modify);
+    map.removeInteraction(dragBox);
+
+    map.removeOverlay(tooltip);
+
+    tooltip.element.classList.add('d-none');
+
+    map.un('singleclick', identify);
 }

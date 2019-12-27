@@ -65,15 +65,15 @@
                         <li class="list-group-item tool" title="Seleção" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">tab_unselected</i>
                             <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                                <button class="dropdown-item" type="button">
+                                <button onclick="enableSelect(this)" class="dropdown-item" type="button">
                                     <i class="far fa-hand-point-up"></i>
                                     Única
                                 </button>
-                                <button class="dropdown-item" type="button">
+                                <button onclick="enableMultiSelect(this)" class="dropdown-item" type="button">
                                     <i class="far fa-object-ungroup"></i>
                                     Múltipla
                                 </button>
-                                <button class="dropdown-item" type="button">
+                                <button onclick="enableEdit(this)" class="dropdown-item" type="button">
                                     <i class="far fa-edit"></i>
                                     Editar
                                 </button>
@@ -204,6 +204,9 @@
             </a>
             <div id="popup-content" class="ol-popup-content"></div>
         </div>
+
+        <!-- Tooltip -->
+        <div id="tooltip"></div>
 
         <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
         <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
