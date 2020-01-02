@@ -71,7 +71,9 @@ var map = new ol.Map({
     target: 'map',
     view: new ol.View({
         center: ol.proj.fromLonLat([-53, -30.5]),
-        zoom: 7
+        zoom: 7,
+        minZoom: 7,
+        maxZoom: 17
     })
 });
 
@@ -126,7 +128,8 @@ function setBasemap(target, type, style) {
     map.addLayer(
         new ol.layer.Tile({
             type: 'basemap',
-            source: source
+            source: source,
+            crossOrigin: 'anonymous'
         })
     );
 
@@ -200,7 +203,7 @@ function zoomToCoords(target) {
     var lon = parseFloat(coordinates[1]);
     var coordinate = ol.proj.transform([lat, lon], 'EPSG:4326', 'EPSG:3857');
     closePopup();
-    viewCenter(coordinate, 2000, 15);
+    viewCenter(coordinate, 2000, 17);
 }
 
 function copyCoords() {
