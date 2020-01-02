@@ -331,7 +331,9 @@ function enableDraw(target, type) {
 }
 
 function clearDraw() {
-    drawSource.clear();
+    if (confirm('Tem certeza?\nEssa ação irá excluir todos os desenhos')) {
+        drawSource.clear();
+    }
 }
 
 // Utils
