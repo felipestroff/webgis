@@ -35,138 +35,138 @@
                     </li>
                     <!-- Basemaps -->
                     <div class="dropdown">
-                        <li class="list-group-item tool" title="Camadas base" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                        <button class="list-group-item tool" title="Camadas base" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">layers</i>
-                            <ul class="dropdown-menu dropdown-menu-left dropdown-menu-lg-left">
-                                <button onclick="clearBasemap(this)" class="dropdown-item dropdown-item-basemap" type="button">
-                                    <img src="images/none.jpg" class="rounded-circle img-basemap">
-                                    Nenhum
-                                </button>
-                                <button onclick="setBasemap(this, 'bing', 'Aerial')" class="dropdown-item dropdown-item-basemap" type="button">
-                                    <img src="images/bing-aerial.jpg" class="rounded-circle img-basemap">
-                                    Bing Aerial
-                                </button>
-                                <button onclick="setBasemap(this, 'bing', 'AerialWithLabels')" class="dropdown-item dropdown-item-basemap" type="button">
-                                    <img src="images/bing-aerial-labels.jpg" class="rounded-circle img-basemap">
-                                    Bing Aerial (rótulos)
-                                </button>
-                                <button onclick="setBasemap(this, 'bing', 'RoadOnDemand')" class="dropdown-item dropdown-item-basemap" type="button">
-                                    <img src="images/bing-road.jpg" class="rounded-circle img-basemap">
-                                    Bing Road
-                                </button>
-                                <button onclick="setBasemap(this, 'osm')" class="dropdown-item dropdown-item-basemap active" type="button">
-                                    <img src="images/osm.jpg" class="rounded-circle img-basemap">
-                                    OpenStreepMap
-                                </button>
-                            </ul>
-                        </li>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-left dropdown-menu-lg-left">
+                            <button onclick="clearBasemap(this)" class="dropdown-item dropdown-item-basemap" type="button">
+                                <img src="images/none.jpg" class="rounded-circle img-basemap">
+                                Nenhum
+                            </button>
+                            <button onclick="setBasemap(this, 'bing', 'Aerial')" class="dropdown-item dropdown-item-basemap" type="button">
+                                <img src="images/bing-aerial.jpg" class="rounded-circle img-basemap">
+                                Bing Aerial
+                            </button>
+                            <button onclick="setBasemap(this, 'bing', 'AerialWithLabels')" class="dropdown-item dropdown-item-basemap" type="button">
+                                <img src="images/bing-aerial-labels.jpg" class="rounded-circle img-basemap">
+                                Bing Aerial (rótulos)
+                            </button>
+                            <button onclick="setBasemap(this, 'bing', 'RoadOnDemand')" class="dropdown-item dropdown-item-basemap" type="button">
+                                <img src="images/bing-road.jpg" class="rounded-circle img-basemap">
+                                Bing Road
+                            </button>
+                            <button onclick="setBasemap(this, 'osm')" class="dropdown-item dropdown-item-basemap active" type="button">
+                                <img src="images/osm.jpg" class="rounded-circle img-basemap">
+                                OpenStreepMap
+                            </button>
+                        </div>
                     </div>
                     <div class="dropdown">
-                        <li class="list-group-item tool" title="Seleção" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                        <button class="list-group-item tool" title="Seleção" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">tab_unselected</i>
-                            <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                                <button onclick="enableSelect(this)" class="dropdown-item" type="button">
-                                    <i class="far fa-hand-point-up"></i>
-                                    Única
-                                </button>
-                                <button onclick="enableMultiSelect(this)" class="dropdown-item" type="button">
-                                    <i class="far fa-object-ungroup"></i>
-                                    Múltipla
-                                </button>
-                                <button onclick="enableEdit(this)" class="dropdown-item" type="button">
-                                    <i class="far fa-edit"></i>
-                                    Editar
-                                </button>
-                            </ul>
-                        </li>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
+                            <button onclick="enableSelect(this)" class="dropdown-item" type="button">
+                                <i class="far fa-hand-point-up"></i>
+                                Única
+                            </button>
+                            <button onclick="enableMultiSelect(this)" class="dropdown-item" type="button">
+                                <i class="far fa-object-ungroup"></i>
+                                Múltipla
+                            </button>
+                            <button onclick="enableEdit(this)" class="dropdown-item" type="button">
+                                <i class="far fa-edit"></i>
+                                Editar
+                            </button>
+                        </div>
                     </div>
                     <li class="list-group-item tool" title="Calculadora de coordenadas">
                         <i class="material-icons">keyboard</i>
                     </li>
                     <div class="dropdown">
-                        <li class="list-group-item tool" title="Medir" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                        <button class="list-group-item tool" title="Medir" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">square_foot</i>
-                            <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                                <button class="dropdown-item" type="button">
-                                    <i class="fas fa-ruler-vertical"></i>
-                                    Distância
-                                </button>
-                                <button class="dropdown-item" type="button">
-                                    <i class="fas fa-chart-area"></i>
-                                    Área
-                                </button>
-                            </ul>
-                        </li>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-ruler-vertical"></i>
+                                Distância
+                            </button>
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-chart-area"></i>
+                                Área
+                            </button>
+                        </div>
                     </div>
                     <div class="dropdown">
-                        <li class="list-group-item tool" title="Desenhar" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                        <button class="list-group-item tool" title="Desenhar" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">brush</i>
-                            <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                                <button onclick="enableDraw(this, 'Point')" class="dropdown-item" type="button">
-                                    <i class="fas fa-circle"></i>
-                                    Ponto
-                                </button>
-                                <button onclick="enableDraw(this, 'LineString')" class="dropdown-item" type="button">
-                                    <i class="fas fa-minus"></i>
-                                    Linha
-                                </button>
-                                <button onclick="enableDraw(this, 'Polygon')" class="dropdown-item" type="button">
-                                    <i class="fas fa-draw-polygon"></i>
-                                    Polígono
-                                </button>
-                                <button onclick="enableDraw(this, 'Circle')" class="dropdown-item" type="button">
-                                    <i class="far fa-circle"></i>
-                                    Círculo
-                                </button>
-                                <li class="dropdown-divider"></li>
-                                <li class="custom-control custom-switch ml-4">
-                                    <input type="checkbox" class="custom-control-input" id="freehandSwitch">
-                                    <label class="custom-control-label" for="freehandSwitch">Livre</label>
-                                </li>
-                                <button onclick="clearDraw()" class="dropdown-item" type="button">
-                                    <i class="fas fa-trash text-secondary"></i>
-                                    Limpar
-                                </button>
-                            </ul>
-                        </li>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
+                            <button onclick="enableDraw(this, 'Point')" class="dropdown-item" type="button">
+                                <i class="fas fa-circle"></i>
+                                Ponto
+                            </button>
+                            <button onclick="enableDraw(this, 'LineString')" class="dropdown-item" type="button">
+                                <i class="fas fa-minus"></i>
+                                Linha
+                            </button>
+                            <button onclick="enableDraw(this, 'Polygon')" class="dropdown-item" type="button">
+                                <i class="fas fa-draw-polygon"></i>
+                                Polígono
+                            </button>
+                            <button onclick="enableDraw(this, 'Circle')" class="dropdown-item" type="button">
+                                <i class="far fa-circle"></i>
+                                Círculo
+                            </button>
+                            <li class="dropdown-divider"></li>
+                            <li class="custom-control custom-switch ml-4">
+                                <input type="checkbox" class="custom-control-input" id="freehandSwitch">
+                                <label class="custom-control-label" for="freehandSwitch">Livre</label>
+                            </li>
+                            <button onclick="clearDraw()" class="dropdown-item" type="button">
+                                <i class="fas fa-trash text-secondary"></i>
+                                Limpar
+                            </button>
+                        </div>
                     </div>
                     <li class="list-group-item tool" title="Impressão">
                         <i class="material-icons">print</i>
                     </li>
                     <div class="dropdown">
-                        <li class="list-group-item tool" title="Exibir" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                        <button class="list-group-item tool" title="Exibir" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">remove_red_eye</i>
-                            <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-right pl-4">
-                                <li class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="labelsSwitch" checked>
-                                    <label class="custom-control-label" for="labelsSwitch">Rótulos</label>
-                                </li>
-                                <li class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="popupsSwitch" checked>
-                                    <label class="custom-control-label" for="popupsSwitch">Pop-ups</label>
-                                </li>
-                                <li class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="layersSwitch" checked>
-                                    <label class="custom-control-label" for="layersSwitch">Camadas</label>
-                                </li>
-                                <li class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="markersSwitch" checked>
-                                    <label class="custom-control-label" for="markersSwitch">Marcadores</label>
-                                </li>
-                                <li class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="pointsSwitch" checked>
-                                    <label class="custom-control-label" for="pointsSwitch">Pontos</label>
-                                </li>
-                                <li class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="filesSwitch" checked>
-                                    <label class="custom-control-label" for="filesSwitch">Arquivos</label>
-                                </li>
-                                <li class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="tipsSwitch" checked>
-                                    <label class="custom-control-label" for="tipsSwitch">Dicas</label>
-                                </li>
-                            </ul>
-                        </li>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-right pl-4">
+                            <a class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="labelsSwitch" checked>
+                                <label class="custom-control-label" for="labelsSwitch">Rótulos</label>
+                            </a>
+                            <li class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="popupsSwitch" checked>
+                                <label class="custom-control-label" for="popupsSwitch">Pop-ups</label>
+                            </li>
+                            <li class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="layersSwitch" checked>
+                                <label class="custom-control-label" for="layersSwitch">Camadas</label>
+                            </li>
+                            <li class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="markersSwitch" checked>
+                                <label class="custom-control-label" for="markersSwitch">Marcadores</label>
+                            </li>
+                            <li class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="pointsSwitch" checked>
+                                <label class="custom-control-label" for="pointsSwitch">Pontos</label>
+                            </li>
+                            <li class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="filesSwitch" checked>
+                                <label class="custom-control-label" for="filesSwitch">Arquivos</label>
+                            </li>
+                            <li class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="tipsSwitch" checked>
+                                <label class="custom-control-label" for="tipsSwitch">Dicas</label>
+                            </li>
+                        </div>
                     </div>
                     <li class="list-group-item tool" title="Legendas">
                         <i class="material-icons">format_list_bulleted</i>

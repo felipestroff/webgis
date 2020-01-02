@@ -260,7 +260,7 @@ function enableSelect(target) {
 
         target.classList.add('active');
         // Parent
-        $(target).closest('li').addClass('active');
+        $(target).closest('.tool').addClass('active');
         
         document.getElementById('map').style.cursor = 'pointer';
         map.addInteraction(select);
