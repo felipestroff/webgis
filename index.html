@@ -102,21 +102,30 @@
                         <li class="list-group-item tool" title="Desenhar" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">brush</i>
                             <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                                <button class="dropdown-item" type="button">
+                                <button onclick="enableDraw(this, 'Point')" class="dropdown-item" type="button">
                                     <i class="fas fa-circle"></i>
                                     Ponto
                                 </button>
-                                <button class="dropdown-item" type="button">
+                                <button onclick="enableDraw(this, 'LineString')" class="dropdown-item" type="button">
                                     <i class="fas fa-minus"></i>
                                     Linha
                                 </button>
-                                <button class="dropdown-item" type="button">
+                                <button onclick="enableDraw(this, 'Polygon')" class="dropdown-item" type="button">
                                     <i class="fas fa-draw-polygon"></i>
                                     Polígono
                                 </button>
-                                <button class="dropdown-item" type="button">
+                                <button onclick="enableDraw(this, 'Circle')" class="dropdown-item" type="button">
                                     <i class="far fa-circle"></i>
                                     Círculo
+                                </button>
+                                <li class="dropdown-divider"></li>
+                                <li class="custom-control custom-switch ml-4">
+                                    <input type="checkbox" class="custom-control-input" id="freehandSwitch">
+                                    <label class="custom-control-label" for="freehandSwitch">Livre</label>
+                                </li>
+                                <button onclick="clearDraw()" class="dropdown-item" type="button">
+                                    <i class="fas fa-trash text-danger"></i>
+                                    Limpar
                                 </button>
                             </ul>
                         </li>

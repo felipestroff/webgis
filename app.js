@@ -1,5 +1,12 @@
 // * Sources
-var source = new ol.source.Vector();
+var drawSource = new ol.source.Vector({
+    wrapX: false
+});
+
+// * Vectors
+var drawVector = new ol.layer.Vector({
+    source: drawSource
+});
 
 // * Interactions
 var select = new ol.interaction.Select({
@@ -7,8 +14,10 @@ var select = new ol.interaction.Select({
     multi: true
 });
 
+var draw;
+
 var modify = new ol.interaction.Modify({
-    source: source
+    source: drawSource
 });
 
 var dragBox = new ol.interaction.DragBox();
@@ -28,6 +37,31 @@ var popupOverlay = new ol.Overlay({
     autoPanAnimation: {
         duration: 250
     }
+});
+
+// * Test Layer
+/*var testLayer = new ol.layer.Tile({
+    type: 'wms',
+    source: new ol.source.TileWMS({
+        url: 'http://infoambiente.stesa.com.br:8080/geoserver/wms',
+        params: {
+            'LAYERS': 'InfoAmbiente:EGR_INFR_Portos',
+        },
+        serverType: 'geoserver',
+        crossOrigin: 'anonymous'
+    })
+});*/
+
+// Set Z indexes
+//testLayer.setZIndex(1);
+drawVector.setZIndex(2);
+
+// * View
+var view = new ol.View({
+    center: ol.proj.fromLonLat([-53, -30.5]),
+    zoom: 7,
+    minZoom: 7,
+    maxZoom: 17
 });
 
 // * Map
@@ -66,15 +100,12 @@ var map = new ol.Map({
         new ol.layer.Tile({
             type: 'basemap',
             source: new ol.source.OSM()
-        })
+        }),
+        drawVector,
+        //testLayer
     ],
     target: 'map',
-    view: new ol.View({
-        center: ol.proj.fromLonLat([-53, -30.5]),
-        zoom: 7,
-        minZoom: 7,
-        maxZoom: 17
-    })
+    view: view
 });
 
 // * Events
@@ -87,12 +118,6 @@ dragBox.on('boxend', function() {
 });
 
 // * Functions
-function closePopup() {
-    popupOverlay.setPosition(undefined);
-    this.blur();
-    return false;
-}
-
 // Layers
 function clearBasemap(target) {
 
@@ -100,7 +125,7 @@ function clearBasemap(target) {
     $(target).addClass('active');
 
     map.getLayers().forEach(function (layer) {
-        if (layer.get('type') === 'basemap') {
+        if (layer && layer.get('type') === 'basemap') {
             map.removeLayer(layer);
         }
     });
@@ -125,13 +150,10 @@ function setBasemap(target, type, style) {
         });
     }
 
-    map.addLayer(
-        new ol.layer.Tile({
-            type: 'basemap',
-            source: source,
-            crossOrigin: 'anonymous'
-        })
-    );
+    map.addLayer(new ol.layer.Tile({
+        type: 'basemap',
+        source: source
+    }));
 
     $('.dropdown-item-basemap').removeClass('active');
     $(target).addClass('active');
@@ -151,6 +173,13 @@ function viewCenter(coordinate, duration, zoom) {
     });
 }
 
+// Popup
+function closePopup() {
+    popupOverlay.setPosition(undefined);
+    this.blur();
+    return false;
+}
+
 // Identify
 function enableIdentify(target) {
     if (target.classList.contains('active')) {
@@ -168,16 +197,24 @@ function enableIdentify(target) {
 function identify(event) {
 
     var coordinates = ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326');
-    var features = map.getFeaturesAtPixel(event.pixel);
-
+    var features = map.getFeaturesAtPixel(event.pixel)
+    
     if (features.length) {
-        console.log(features);
+
     }
     else {
         identifyPoint(coordinates);
     }
 
     popupOverlay.setPosition(event.coordinate);
+}
+
+function identifyLayer(coordinates, html) {
+    
+    $('#popup-zoom').data('coordinates', coordinates);
+    
+    document.getElementById('popup-content').innerHTML = html;
+    document.getElementById('popup').classList.remove('d-none');
 }
 
 function identifyPoint(coordinates) {
@@ -270,6 +307,33 @@ function enableEdit(target) {
     }
 }
 
+// Draw
+function enableDraw(target, type) {
+
+    if (target.classList.contains('active')) {
+        removeInteractions();
+    }
+    else {
+        removeInteractions();
+
+        target.classList.add('active');
+        // Parent
+        $(target).closest('li').addClass('active');
+
+        draw = new ol.interaction.Draw({
+            source: drawSource,
+            type: type,
+            freehand: document.getElementById('freehandSwitch').checked
+        });
+    
+        map.addInteraction(draw);
+    }
+}
+
+function clearDraw() {
+    drawSource.clear();
+}
+
 // Utils
 function createTooltip(html) {
 
@@ -289,6 +353,7 @@ function removeInteractions() {
     map.removeInteraction(select);
     map.removeInteraction(modify);
     map.removeInteraction(dragBox);
+    map.removeInteraction(draw);
 
     map.removeOverlay(tooltip);
 
