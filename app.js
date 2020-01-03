@@ -117,6 +117,10 @@ dragBox.on('boxend', function() {
     map.removeOverlay(tooltip);
 });
 
+$('.custom-switch').on('click', function (event) {
+    event.stopPropagation();
+});
+
 // * Functions
 // Layers
 function clearBasemap(target) {
