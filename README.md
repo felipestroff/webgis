@@ -46,6 +46,9 @@ Desenvolvido
     - Circle
     - Freehand Option
     - Delete Features
+- Toggle
+    - Popups
+    - Tips
 
 Em desenvolvimento
 

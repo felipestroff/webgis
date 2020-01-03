@@ -140,11 +140,11 @@
                                 <label class="custom-control-label" for="labelsSwitch">Rótulos</label>
                             </a>
                             <li class="custom-control custom-switch">
-                                <input onchange="togglePopup(this.checked)" type="checkbox" class="custom-control-input" id="popupsSwitch" checked>
+                                <input onchange="togglePopups(this.checked)" type="checkbox" class="custom-control-input" id="popupsSwitch" checked>
                                 <label class="custom-control-label" for="popupsSwitch">Pop-ups</label>
                             </li>
                             <li class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="layersSwitch" checked>
+                                <input onchange="toggleLayers(this.checked)" type="checkbox" class="custom-control-input" id="layersSwitch" checked>
                                 <label class="custom-control-label" for="layersSwitch">Camadas</label>
                             </li>
                             <li class="custom-control custom-switch">
@@ -160,7 +160,7 @@
                                 <label class="custom-control-label" for="filesSwitch">Arquivos</label>
                             </li>
                             <li class="custom-control custom-switch">
-                                <input onchange="toggleTooltip(this.checked)" type="checkbox" class="custom-control-input" id="tipsSwitch" checked>
+                                <input onchange="toggleTooltips(this.checked)" type="checkbox" class="custom-control-input" id="tipsSwitch" checked>
                                 <label class="custom-control-label" for="tipsSwitch">Dicas</label>
                             </li>
                         </div>

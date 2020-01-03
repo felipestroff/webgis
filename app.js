@@ -40,7 +40,7 @@ var popupOverlay = new ol.Overlay({
 });
 
 // * Test Layer
-/*var testLayer = new ol.layer.Tile({
+var testLayer = new ol.layer.Tile({
     type: 'wms',
     source: new ol.source.TileWMS({
         url: 'http://infoambiente.stesa.com.br:8080/geoserver/wms',
@@ -50,10 +50,10 @@ var popupOverlay = new ol.Overlay({
         serverType: 'geoserver',
         crossOrigin: 'anonymous'
     })
-});*/
+});
 
 // Set Z indexes
-//testLayer.setZIndex(1);
+testLayer.setZIndex(1);
 drawVector.setZIndex(2);
 
 // * View
@@ -102,7 +102,7 @@ var map = new ol.Map({
             source: new ol.source.OSM()
         }),
         drawVector,
-        //testLayer
+        testLayer
     ],
     target: 'map',
     view: view
@@ -163,6 +163,26 @@ function setBasemap(target, type, style) {
     $(target).addClass('active');
 }
 
+function toggleLayers(checked) {
+
+    var layers = map.getLayers();
+
+    if (checked) {
+        layers.forEach(function(layer) {
+            if (layer.get('type') === 'wms') {
+                layer.setVisible(true);
+            }
+        });
+    }
+    else {
+        layers.forEach(function(layer) {
+            if (layer.get('type') === 'wms') {
+                layer.setVisible(false);
+            }
+        });
+    }
+}
+
 // Zooms
 function zoomGoto() {
     var coordinates = ol.proj.fromLonLat([-53, -30.5]);
@@ -184,7 +204,7 @@ function closePopup() {
     return false;
 }
 
-function togglePopup(checked) {
+function togglePopups(checked) {
     if (checked) {
         document.getElementById('popup').classList.remove('d-none');
     }
@@ -265,7 +285,7 @@ function enableSelect(target) {
 
         target.classList.add('active');
         // Parent
-        $(target).closest('.tool').addClass('active');
+        $(target).closest('.dropdown').find('.tool').addClass('active');
         
         document.getElementById('map').style.cursor = 'pointer';
         map.addInteraction(select);
@@ -284,7 +304,7 @@ function enableMultiSelect(target) {
 
         target.classList.add('active');
         // Parent
-        $(target).closest('li').addClass('active');
+        $(target).closest('.dropdown').find('.tool').addClass('active');
         
         document.getElementById('map').style.cursor = 'grab';
         map.addInteraction(select);
@@ -304,7 +324,7 @@ function enableEdit(target) {
 
         target.classList.add('active');
         // Parent
-        $(target).closest('li').addClass('active');
+        $(target).closest('.dropdown').find('.tool').addClass('active');
         
         map.addInteraction(modify);
 
@@ -323,7 +343,7 @@ function enableDraw(target, type) {
 
         target.classList.add('active');
         // Parent
-        $(target).closest('li').addClass('active');
+        $(target).closest('.dropdown').find('.tool').addClass('active');
 
         draw = new ol.interaction.Draw({
             source: drawSource,
@@ -349,7 +369,7 @@ function createTooltip(html) {
     map.addOverlay(tooltipOverlay);
 }
 
-function toggleTooltip(checked) {
+function toggleTooltips(checked) {
     if (checked) {
         tooltipOverlay.element.classList.remove('d-none');
     }
