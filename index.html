@@ -5,10 +5,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="style.css" type="text/css">
-
-        <script src="https://kit.fontawesome.com/2b2b74cc8f.js" crossorigin="anonymous"></script>
-        
-        <title>WebGIS</title>  
+        <title>WebGIS</title>
     </head>
     <body>
         <!-- Navbar -->
@@ -143,7 +140,7 @@
                                 <label class="custom-control-label" for="labelsSwitch">Rótulos</label>
                             </a>
                             <li class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="popupsSwitch" checked>
+                                <input onchange="togglePopup(this.checked)" type="checkbox" class="custom-control-input" id="popupsSwitch" checked>
                                 <label class="custom-control-label" for="popupsSwitch">Pop-ups</label>
                             </li>
                             <li class="custom-control custom-switch">
@@ -163,7 +160,7 @@
                                 <label class="custom-control-label" for="filesSwitch">Arquivos</label>
                             </li>
                             <li class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="tipsSwitch" checked>
+                                <input onchange="toggleTooltip(this.checked)" type="checkbox" class="custom-control-input" id="tipsSwitch" checked>
                                 <label class="custom-control-label" for="tipsSwitch">Dicas</label>
                             </li>
                         </div>
@@ -201,7 +198,7 @@
         <div id="map"></div>
 
         <!-- Popup -->
-        <div id="popup" class="ol-popup d-none">
+        <div id="popup" class="ol-popup">
             <a onclick="zoomToCoords(this)" href="#" title="Zoom para" id="popup-zoom" class="ol-popup-zoom">
                 <i class="material-icons">zoom_in</i>
             </a>
@@ -219,6 +216,7 @@
 
         <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
         <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+        <script src="https://kit.fontawesome.com/2b2b74cc8f.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/build/ol.js"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

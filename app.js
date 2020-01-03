@@ -23,7 +23,7 @@ var modify = new ol.interaction.Modify({
 var dragBox = new ol.interaction.DragBox();
 
 // * Tooltips
-var tooltip = new ol.Overlay({
+var tooltipOverlay = new ol.Overlay({
     element: document.getElementById('tooltip'),
     offset: [0, -15],
     positioning: 'bottom-center',
@@ -110,11 +110,11 @@ var map = new ol.Map({
 
 // * Events
 map.on('pointermove', function (event) {
-    tooltip.setPosition(event.coordinate);
+    tooltipOverlay.setPosition(event.coordinate);
 });
 
 dragBox.on('boxend', function() {
-    map.removeOverlay(tooltip);
+    map.removeOverlay(tooltipOverlay);
 });
 
 $('.custom-switch').on('click', function (event) {
@@ -184,6 +184,15 @@ function closePopup() {
     return false;
 }
 
+function togglePopup(checked) {
+    if (checked) {
+        document.getElementById('popup').classList.remove('d-none');
+    }
+    else {
+        document.getElementById('popup').classList.add('d-none');
+    }
+}
+
 // Identify
 function enableIdentify(target) {
     if (target.classList.contains('active')) {
@@ -193,7 +202,9 @@ function enableIdentify(target) {
         removeInteractions();
 
         target.classList.add('active');
+
         document.getElementById('map').style.cursor = 'help';
+
         map.on('singleclick', identify);
     }
 }
@@ -201,24 +212,16 @@ function enableIdentify(target) {
 function identify(event) {
 
     var coordinates = ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326');
-    var features = map.getFeaturesAtPixel(event.pixel)
+    var features = map.getFeaturesAtPixel(event.pixel);
     
     if (features.length) {
-
+        // TODO
     }
     else {
         identifyPoint(coordinates);
     }
 
     popupOverlay.setPosition(event.coordinate);
-}
-
-function identifyLayer(coordinates, html) {
-    
-    $('#popup-zoom').data('coordinates', coordinates);
-    
-    document.getElementById('popup-content').innerHTML = html;
-    document.getElementById('popup').classList.remove('d-none');
 }
 
 function identifyPoint(coordinates) {
@@ -234,8 +237,6 @@ function identifyPoint(coordinates) {
             '</div>' +
             '<input type="text" value="' + formated + '" id="popup-coordinates" class="form-control">' +
         '</div>';
-
-    document.getElementById('popup').classList.remove('d-none');
 }
 
 function zoomToCoords(target) {
@@ -343,11 +344,18 @@ function clearDraw() {
 // Utils
 function createTooltip(html) {
 
-    tooltip.element.innerHTML = html;
+    tooltipOverlay.element.innerHTML = html;
 
-    map.addOverlay(tooltip);
+    map.addOverlay(tooltipOverlay);
+}
 
-    tooltip.element.classList.remove('d-none');
+function toggleTooltip(checked) {
+    if (checked) {
+        tooltipOverlay.element.classList.remove('d-none');
+    }
+    else {
+        tooltipOverlay.element.classList.add('d-none');
+    }
 }
 
 function removeInteractions() {
@@ -361,9 +369,7 @@ function removeInteractions() {
     map.removeInteraction(dragBox);
     map.removeInteraction(draw);
 
-    map.removeOverlay(tooltip);
-
-    tooltip.element.classList.add('d-none');
+    map.removeOverlay(tooltipOverlay);
 
     map.un('singleclick', identify);
 }
