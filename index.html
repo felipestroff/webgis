@@ -1,184 +1,284 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
     <head>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/css/ol.css" type="text/css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="style.css" type="text/css">
         <title>WebGIS</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="Description" content="OpenLayers WebGIS">
+        <meta name="theme-color" content="#343A40">
+        <link rel="manifest" href="manifest.json">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon" href="images/icons-192.png">
+        <link rel="stylesheet" href="styles/ol.css">
+        <link rel="stylesheet" href="styles/bootstrap.css">
+        <link rel="stylesheet" href="styles/jquery.contextMenu.css">
+        <link rel="stylesheet" href="styles/material.css">
+        <link rel="stylesheet" href="styles/app.css">
     </head>
     <body>
         <!-- Navbar -->
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <span class="navbar-brand">WebGIS</span>
+            <a class="navbar-brand" href="#">WebGIS</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#tools" aria-controls="tools" aria-expanded="false" aria-label="Exibir Ferramentas">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <!-- Tools -->
             <div class="collapse navbar-collapse justify-content-between" id="tools">
-                <ul class="navbar-nav list-group list-group-horizontal">
-                    <li class="list-group-item tool" title="Gestão">
-                        <i class="material-icons">build</i>
-                    </li>
-                    <li class="list-group-item tool" title="Notificações">
-                        <i class="material-icons">notifications_none</i>
-                    </li>
-                    <li onclick="zoomGoto()" class="list-group-item tool" title="Visualização padrão">
+                <div class="navbar-nav list-group list-group-horizontal">
+                    <!-- File -->
+                    <div class="dropdown">
+                        <button class="list-group-item tool" title="Arquivo" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">insert_drive_file</i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" title="Importar">
+                                    <i class="fas fa-upload"></i>
+                                    Importar
+                                </a>
+                                <div class="dropdown-menu dropdown-form p-4">
+                                    <div class="form-group">
+                                        <label for="importFile">Selecionar arquivo</label>
+                                        <input onchange="importFeatures(event)" type="file" id="importFile" class="form-control-file" accept="
+                                            application/vnd.geo+json,
+                                            application/vnd.google-earth.kml+xml"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" title="Exportar">
+                                    <i class="fas fa-download"></i>
+                                    Exportar
+                                </a>
+                                <form onsubmit="exportFeatures(event)" class="dropdown-menu dropdown-form p-4">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="exportDrawSwitch" checked>
+                                        <label class="custom-control-label" for="exportDrawSwitch">Desenhos</label>
+                                    </div>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="exportMeasureSwitch" checked>
+                                        <label class="custom-control-label" for="exportMeasureSwitch">Medições</label>
+                                    </div>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="exportMarkerSwitch" checked>
+                                        <label class="custom-control-label" for="exportMarkerSwitch">Marcadores</label>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="exportFormat">Formato</label>
+                                        <select class="form-control" id="exportFormat">
+                                            <option value="geojson" selected>GeoJSON</option>
+                                            <option value="kml">KML</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" id="exportBtn" class="btn btn-primary">Download</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <a onclick="zoomGoto()" class="list-group-item tool" title="Visualização padrão">
                         <i class="material-icons">home</i>
-                    </li>
-                    <li onclick="enableIdentify(this)" class="list-group-item tool" title="Exibir informações">
+                    </a>
+                    <a onclick="enableGeolocation()" class="list-group-item tool" title="Geolocalização">
+                        <i id="geolocationIcon" class="material-icons">gps_off</i>
+                    </a>
+                    <a onclick="enableIdentify(this)" class="list-group-item tool" title="Exibir informações">
                         <i class="material-icons">info_outline</i>
-                    </li>
+                    </a>
                     <!-- Basemaps -->
                     <div class="dropdown">
                         <button class="list-group-item tool" title="Camadas base" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">layers</i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-left dropdown-menu-lg-left">
-                            <button onclick="clearBasemap(this)" class="dropdown-item dropdown-item-basemap" type="button">
+                            <a onclick="clearBasemap(this)" class="dropdown-item dropdown-item-basemap">
                                 <img src="images/none.jpg" class="rounded-circle img-basemap">
                                 Nenhum
-                            </button>
-                            <button onclick="setBasemap(this, 'bing', 'Aerial')" class="dropdown-item dropdown-item-basemap" type="button">
+                            </a>
+                            <a id="itemBingAerial" onclick="setBasemap(this, 'bing', 'Aerial')" class="dropdown-item dropdown-item-basemap">
                                 <img src="images/bing-aerial.jpg" class="rounded-circle img-basemap">
                                 Bing Aerial
-                            </button>
-                            <button onclick="setBasemap(this, 'bing', 'AerialWithLabels')" class="dropdown-item dropdown-item-basemap" type="button">
-                                <img src="images/bing-aerial-labels.jpg" class="rounded-circle img-basemap">
-                                Bing Aerial (rótulos)
-                            </button>
-                            <button onclick="setBasemap(this, 'bing', 'RoadOnDemand')" class="dropdown-item dropdown-item-basemap" type="button">
+                            </a>
+                            <a onclick="setBasemap(this, 'bing', 'RoadOnDemand')" class="dropdown-item dropdown-item-basemap">
                                 <img src="images/bing-road.jpg" class="rounded-circle img-basemap">
                                 Bing Road
-                            </button>
-                            <button onclick="setBasemap(this, 'osm')" class="dropdown-item dropdown-item-basemap active" type="button">
+                            </a>
+                            <a onclick="setBasemap(this, 'bing', 'CanvasDark')" class="dropdown-item dropdown-item-basemap">
+                                <img src="images/canvas-dark.jpg" class="rounded-circle img-basemap">
+                                Bing Road Dark
+                            </a>
+                            <a onclick="setBasemap(this, 'osm')" class="dropdown-item dropdown-item-basemap active">
                                 <img src="images/osm.jpg" class="rounded-circle img-basemap">
                                 OpenStreepMap
-                            </button>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <div class="custom-control custom-switch ml-4">
+                                <input onchange="setBasemapLabels(this)" type="checkbox" class="custom-control-input" id="basemapLabelsSwitch" disabled>
+                                <label class="custom-control-label" for="basemapLabelsSwitch">Rótulos</label>
+                            </div>
                         </div>
                     </div>
+                    <!-- Select -->
                     <div class="dropdown">
                         <button class="list-group-item tool" title="Seleção" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">tab_unselected</i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                            <button onclick="enableSelect(this)" class="dropdown-item" type="button">
+                            <a onclick="enableSelect(this)" class="dropdown-item">
                                 <i class="far fa-hand-point-up"></i>
                                 Única
-                            </button>
-                            <button onclick="enableMultiSelect(this)" class="dropdown-item" type="button">
+                            </a>
+                            <a onclick="enableMultiSelect(this)" class="dropdown-item">
                                 <i class="far fa-object-ungroup"></i>
                                 Múltipla
-                            </button>
-                            <button onclick="enableEdit(this)" class="dropdown-item" type="button">
+                            </a>
+                            <a onclick="enableEdit(this)" class="dropdown-item">
                                 <i class="far fa-edit"></i>
                                 Editar
-                            </button>
+                            </a>
                         </div>
                     </div>
-                    <li class="list-group-item tool" title="Calculadora de coordenadas">
-                        <i class="material-icons">keyboard</i>
-                    </li>
+                    <!-- Measure -->
                     <div class="dropdown">
                         <button class="list-group-item tool" title="Medir" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">square_foot</i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                            <button class="dropdown-item" type="button">
+                            <a onclick="enableMeasure(this, 'LineString')" class="dropdown-item">
                                 <i class="fas fa-ruler-vertical"></i>
                                 Distância
-                            </button>
-                            <button class="dropdown-item" type="button">
+                            </a>
+                            <a onclick="enableMeasure(this, 'Polygon')" class="dropdown-item">
                                 <i class="fas fa-chart-area"></i>
                                 Área
-                            </button>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a onclick="clearMeasure()" class="dropdown-item">
+                                <i class="fas fa-trash text-secondary"></i>
+                                Limpar
+                            </a>
                         </div>
                     </div>
+                    <!-- Draw -->
                     <div class="dropdown">
                         <button class="list-group-item tool" title="Desenhar" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">brush</i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                            <button onclick="enableDraw(this, 'Point')" class="dropdown-item" type="button">
+                            <a onclick="enableDraw(this, 'Point')" class="dropdown-item">
                                 <i class="fas fa-circle"></i>
                                 Ponto
-                            </button>
-                            <button onclick="enableDraw(this, 'LineString')" class="dropdown-item" type="button">
+                            </a>
+                            <a onclick="enableDraw(this, 'LineString')" class="dropdown-item">
                                 <i class="fas fa-minus"></i>
                                 Linha
-                            </button>
-                            <button onclick="enableDraw(this, 'Polygon')" class="dropdown-item" type="button">
+                            </a>
+                            <a onclick="enableDraw(this, 'Polygon')" class="dropdown-item">
                                 <i class="fas fa-draw-polygon"></i>
                                 Polígono
-                            </button>
-                            <button onclick="enableDraw(this, 'Circle')" class="dropdown-item" type="button">
+                            </a>
+                            <a onclick="enableDraw(this, 'Circle')" class="dropdown-item">
                                 <i class="far fa-circle"></i>
                                 Círculo
-                            </button>
-                            <li class="dropdown-divider"></li>
-                            <li class="custom-control custom-switch ml-4">
-                                <input type="checkbox" class="custom-control-input" id="freehandSwitch">
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <span class="ml-4">Formas</span>
+                            <a onclick="enableShapeDraw(this, 'Square')" class="dropdown-item">
+                                <i class="far fa-square"></i>
+                                Quadrado
+                            </a>
+                            <a onclick="enableShapeDraw(this, 'Star')" class="dropdown-item">
+                                <i class="far fa-star"></i>
+                                Estrela
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <div class="custom-control custom-switch ml-4">
+                                <input onchange="toggleFreehand(this.checked)" type="checkbox" class="custom-control-input" id="freehandSwitch">
                                 <label class="custom-control-label" for="freehandSwitch">Livre</label>
-                            </li>
-                            <button onclick="clearDraw()" class="dropdown-item" type="button">
+                            </div>
+                            <a onclick="clearDraw()" class="dropdown-item">
                                 <i class="fas fa-trash text-secondary"></i>
                                 Limpar
-                            </button>
+                            </a>
                         </div>
                     </div>
-                    <li class="list-group-item tool" title="Impressão">
-                        <i class="material-icons">print</i>
-                    </li>
+                    <!-- Print -->
+                    <div class="dropdown">
+                        <button class="list-group-item tool" title="Impressão" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">print</i>
+                        </button>
+                        <form onsubmit="print(event)" class="dropdown-menu dropdown-menu-right dropdown-form p-4">
+                            <div class="form-group">
+                                <label for="printType">Tipo</label>
+                                <select onchange="changePrintFormat(this.value)" class="form-control" id="printType" required>
+                                    <option value="png">PNG</option>
+                                    <option value="pdf" selected>PDF</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="printFormat">Formato</label>
+                                <select class="form-control" id="printFormat">
+                                    <option value="a0">A0</option>
+                                    <option value="a1">A1</option>
+                                    <option value="a2">A2</option>
+                                    <option value="a3">A3</option>
+                                    <option value="a4" selected>A4</option>
+                                    <option value="a5">A5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="printResolution">Qualidade</label>
+                                <select class="form-control" id="printResolution">
+                                    <option value="72" selected>72 dpi</option>
+                                    <option value="150">150 dpi</option>
+                                    <option value="300">300 dpi</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="printBtn" class="btn btn-primary">Imprimir</button>
+                        </form>
+                    </div>
+                    <!-- Toogle -->
                     <div class="dropdown">
                         <button class="list-group-item tool" title="Exibir" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">remove_red_eye</i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-right pl-4">
-                            <a class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="labelsSwitch" checked>
-                                <label class="custom-control-label" for="labelsSwitch">Rótulos</label>
-                            </a>
-                            <li class="custom-control custom-switch">
+                            <div class="custom-control custom-switch">
                                 <input onchange="togglePopups(this.checked)" type="checkbox" class="custom-control-input" id="popupsSwitch" checked>
                                 <label class="custom-control-label" for="popupsSwitch">Pop-ups</label>
-                            </li>
-                            <li class="custom-control custom-switch">
+                            </div>
+                            <div class="custom-control custom-switch">
                                 <input onchange="toggleLayers(this.checked)" type="checkbox" class="custom-control-input" id="layersSwitch" checked>
                                 <label class="custom-control-label" for="layersSwitch">Camadas</label>
-                            </li>
-                            <li class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="markersSwitch" checked>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input onchange="toggleFeatures(this.checked)" type="checkbox" class="custom-control-input" id="featuresSwitch" checked>
+                                <label class="custom-control-label" for="featuresSwitch">Feições</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input onchange="toggleLabels(this.checked)" type="checkbox" class="custom-control-input" id="labelsSwitch" checked>
+                                <label class="custom-control-label" for="labelsSwitch">Rótulos</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input onchange="toggleMarkers(this.checked)" type="checkbox" class="custom-control-input" id="markersSwitch" checked>
                                 <label class="custom-control-label" for="markersSwitch">Marcadores</label>
-                            </li>
-                            <li class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="pointsSwitch" checked>
-                                <label class="custom-control-label" for="pointsSwitch">Pontos</label>
-                            </li>
-                            <li class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="filesSwitch" checked>
-                                <label class="custom-control-label" for="filesSwitch">Arquivos</label>
-                            </li>
-                            <li class="custom-control custom-switch">
+                            </div>
+                            <div class="custom-control custom-switch">
                                 <input onchange="toggleTooltips(this.checked)" type="checkbox" class="custom-control-input" id="tipsSwitch" checked>
                                 <label class="custom-control-label" for="tipsSwitch">Dicas</label>
-                            </li>
+                            </div>
                         </div>
                     </div>
-                    <li class="list-group-item tool" title="Legendas">
-                        <i class="material-icons">format_list_bulleted</i>
-                    </li>
-                </ul>
-
+                </div>
                 <!-- Login -->
-                <ul class="navbar-nav text-right">
+                <div class="navbar-nav float-right">
                     <div class="dropdown">
-                        <li class="nav-item" title="Login" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                            <a class="nav-link" href="#">
-                                <i class="material-icons">person</i>
-                            </a>
-                        </li>
-                        <form class="dropdown-menu dropdown-menu-right p-4" style="min-width: 300px">
+                        <button class="list-group-item tool" title="Login" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">person</i>
+                        </button>
+                        <form class="dropdown-menu dropdown-menu-right dropdown-form p-4">
                             <div class="form-group">
                                 <label for="userEmail">Email</label>
                                 <input type="email" class="form-control" id="userEmail" placeholder="email@exemplo.com" required>
@@ -190,37 +290,29 @@
                             <button type="submit" class="btn btn-primary">Entrar</button>
                         </form>
                     </div>
-                </ul>
+                </div>
             </div>
         </nav>
-
-        <!-- Map -->
-        <div id="map"></div>
-
-        <!-- Popup -->
-        <div id="popup" class="ol-popup">
-            <a onclick="zoomToCoords(this)" href="#" title="Zoom para" id="popup-zoom" class="ol-popup-zoom">
-                <i class="material-icons">zoom_in</i>
-            </a>
-            <a onclick="copyCoords()" href="#" title="Copiar Coordenadas" id="popup-copy" class="ol-popup-copy">
-                <i class="material-icons">insert_drive_file</i>
-            </a>
-            <a onclick="closePopup()" href="#" title="Fechar" id="popup-closer" class="ol-popup-closer">
-                <i class="material-icons">close</i>
-            </a>
-            <div id="popup-content" class="ol-popup-content"></div>
-        </div>
-
-        <!-- Tooltip -->
-        <div id="tooltip"></div>
-
+        <main>
+            <!-- Map -->
+            <div id="map"></div>
+            <!-- Popup -->
+            <div id="popup" class="ol-popup"></div>
+            <!-- Tooltips -->
+            <div id="tooltip"></div>
+        </main>
         <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
         <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
-        <script src="https://kit.fontawesome.com/2b2b74cc8f.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/build/ol.js"></script>
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        <script src="app.js" type="text/javascript"></script>
+        <script src="lib/ol.js"></script>
+        <script src="lib/jquery.js"></script>
+        <script src="lib/popper.js"></script>
+        <script src="lib/bootstrap.js"></script>
+        <script src="lib/dom-to-image.js"></script>
+        <script src="lib/jspdf.js"></script>
+        <script src="lib/jquery.contextMenu.js"></script>
+        <script src="lib/jquery.ui.position.js"></script>
+        <script src="lib/jquery.easyPaginate.js"></script>
+        <script src="lib/font-awesome.js"></script>
+        <script src="app.js"></script>
     </body>
 </html>
