@@ -32,6 +32,8 @@ Bibliotecas
 **Funcionalidades**
 ------------------------------
 
+Sistema de Projeção: SIRGAS 2000 / WGS84 / EPSG:4326
+
 Desenvolvido
 
 - Zoom Slider

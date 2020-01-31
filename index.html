@@ -38,15 +38,25 @@
                                     <i class="fas fa-upload"></i>
                                     Importar
                                 </a>
-                                <div class="dropdown-menu dropdown-form p-4">
-                                    <div class="form-group">
-                                        <label for="importFile">Selecionar arquivo</label>
-                                        <input onchange="importFeatures(event)" type="file" id="importFile" class="form-control-file" accept="
-                                            application/vnd.geo+json,
-                                            application/vnd.google-earth.kml+xml"
-                                        >
+                                <form onsubmit="importFeatures(event)" class="dropdown-menu dropdown-form p-4">
+                                    <div class="input-group mb-2">
+                                        <div onclick="addImportParam(event)" class="input-group-append" title="Adicionar parâmetro" style="cursor: pointer;">
+                                          <div class="input-group-text">
+                                            <i class="fas fa-plus"></i>
+                                          </div>
+                                        </div>
+                                        <input type="url" id="importUrl" class="form-control" placeholder="URL">
                                     </div>
-                                </div>
+                                    <div id="importParams"></div>
+                                    <div class="form-group mt-4">
+                                        <label for="importFile">Selecionar arquivo</label>
+                                        <input type="file" id="importFile" class="form-control-file" aria-describedby="importFileHelp"
+                                            accept="application/vnd.geo+json"
+                                        >
+                                        <small id="importFileHelp" class="form-text text-muted">Formatos suportados: geojson</small>
+                                    </div>
+                                    <button onclick="importFeaturesFromUrl()" type="submit" class="btn btn-primary mt-2">Importar</button>
+                                </form>
                             </div>
                             <div class="dropdown-submenu">
                                 <a class="dropdown-item dropdown-toggle" title="Exportar">
@@ -293,7 +303,7 @@
                 </div>
             </div>
         </nav>
-        <main>
+        <main> 
             <!-- Map -->
             <div id="map"></div>
             <!-- Popup -->
@@ -309,6 +319,7 @@
         <script src="lib/bootstrap.js"></script>
         <script src="lib/dom-to-image.js"></script>
         <script src="lib/jspdf.js"></script>
+        <script src="lib/xml-js.js"></script>
         <script src="lib/jquery.contextMenu.js"></script>
         <script src="lib/jquery.ui.position.js"></script>
         <script src="lib/jquery.easyPaginate.js"></script>

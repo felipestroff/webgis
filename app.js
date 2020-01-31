@@ -3,6 +3,7 @@ var draw;
 var measure;
 var freehand = false;
 var center;
+var selectedLayer = null;
 
 // * Sources
 var drawSource = new ol.source.Vector({
@@ -89,7 +90,7 @@ var markerVector = new ol.layer.Vector({
 
 // * View
 var view = new ol.View({
-    center: ol.proj.fromLonLat([-53, -30.5]),
+    center: ol.proj.fromLonLat([-52, -31]),
     zoom: 7,
     minZoom: 7,
     maxZoom: 19,
@@ -244,8 +245,23 @@ $(function() {
     });
 });
 
-map.on('singleclick', function(e) {
-    //console.log('[MAP_EVENT]:', e);
+map.on('singleclick', function(evt) {
+    console.log('[MAP_EVENT]:', evt);
+
+    map.getLayers().forEach(function (layer) {
+        if (layer && layer.get('type') === 'layer') {
+            var viewResolution = view.getResolution();
+            var url = layer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, 'EPSG:3857', {'INFO_FORMAT': 'text/html'});
+            
+            if (url) {
+                fetch(url)
+                    .then(function (response) { return response.text(); })
+                    .then(function (html) {
+                        document.getElementById('popup').innerHTML = html;
+                });
+            }
+        }
+    });
 });
 
 map.on('contextmenu', function(e) {
@@ -323,8 +339,8 @@ geolocation.on('error', function(error) {
     $('#itemGeolocation i').html('location_disabled');
 });
 
-// Previne que o radio customizado (switch) feche o dropdown
-$('.custom-switch').on('click', function(event) {
+// Previne que o click dentro do dropdown o feche
+$('.dropdown-menu').on('click', function(event) {
     event.stopPropagation();
 });
 
@@ -415,14 +431,14 @@ function toggleLayers(checked) {
 
     if (checked) {
         layers.forEach(function(layer) {
-            if (layer.get('type') === 'wms') {
+            if (layer.get('type') === 'layer') {
                 layer.setVisible(true);
             }
         });
     }
     else {
         layers.forEach(function(layer) {
-            if (layer.get('type') === 'wms') {
+            if (layer.get('type') === 'layer') {
                 layer.setVisible(false);
             }
         });
@@ -431,7 +447,7 @@ function toggleLayers(checked) {
 
 // Zooms
 function zoomGoto() {
-    var coordinates = ol.proj.fromLonLat([-53, -30.5]);
+    var coordinates = ol.proj.fromLonLat([-52, -31]);
     viewCenter(coordinates, 2000, 7);
 }
 
@@ -484,26 +500,26 @@ function enableIdentify(target) {
     }
 }
 
-function identify(event) {
+function identify(evt) {
     closePopup();
 
-    var coordinates = ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326');
-    var features = map.getFeaturesAtPixel(event.pixel);
+    var coords = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
+    var features = map.getFeaturesAtPixel(evt.pixel);
     
     if (features.length) {
         identifyFeatures(features);
     }
     else {
-        identifyPoint(coordinates);
+        identifyCoordinates(coords);
     }
 
     map.removeOverlay(tooltipOverlay);
 
-    popupOverlay.setPosition(event.coordinate);
+    popupOverlay.setPosition(evt.coordinate);
 }
 
-function identifyPoint(coordinates) {
-    var formated = ol.coordinate.format(coordinates, '{x}, {y}', 3);
+function identifyCoordinates(coords) {
+    var formated = ol.coordinate.format(coords, '{x}, {y}', 3);
 
     document.getElementById('popup').innerHTML =
         '<div class="ol-popup-actions">' +
@@ -514,7 +530,7 @@ function identifyPoint(coordinates) {
         '<div class="ol-popup-content">' +
             '<div class="input-group">' +
                 '<div class="input-group-prepend ol-popup-zoom">' +
-                    '<div onclick="zoomToCoords([' + coordinates + '])" title="Zoom para" class="input-group-text">' +
+                    '<div onclick="zoomToCoords([' + coords + '])" title="Zoom para" class="input-group-text">' +
                         '<i class="fas fa-search-plus"></i>' +
                     '</div>' +
                 '</div>' +
@@ -537,23 +553,25 @@ function identifyFeatures(features) {
         count.innerText = 'de ' + features.length;
 
         features.forEach(function(feature) {
-            var geometry = feature.getGeometry();
-            var type = geometry.getType();
-            var originalCoordinates;
+            var geom = feature.getGeometry();
+            var id = features[0].getId();
+            var type = geom.getType();
+            var content = '';
 
-            if (type === 'Circle') {
-                originalCoordinates = geometry.getCenter();
-            }
-            else if (type === 'Polygon') {
-                flatCoordinates = geometry.getInteriorPoint().flatCoordinates
-                originalCoordinates = [flatCoordinates[0], flatCoordinates[1]];
-            }
-            else {
-                originalCoordinates = geometry.getCoordinates();
+            if (id) {
+                content =
+                    '<div class="input-group">' +
+                        '<div class="input-group-prepend" title="Nome">' +
+                            '<div class="input-group-text">' +
+                                id +
+                            '</div>' +
+                        '</div>' +
+                        '<input type="text" value="' + feature.get('name') + '" class="form-control">' +
+                    '</div>';
             }
 
-            var coordinates = ol.proj.transform(originalCoordinates, 'EPSG:3857', 'EPSG:4326'); 
-            var formated = ol.coordinate.format(coordinates, '{x}, {y}', 3);
+            var coords = ol.proj.transform(getGeomCenter(geom), 'EPSG:3857', 'EPSG:4326'); 
+            var formated = ol.coordinate.format(coords, '{x}, {y}', 3);
 
             $(container).append(
                 '<div class="ol-popup-pagination">' +
@@ -563,9 +581,10 @@ function identifyFeatures(features) {
                         '</button>' +
                     '</div>' +
                     '<div class="ol-popup-content">' +
+                        content +
                         '<div class="input-group">' +
                             '<div class="input-group-prepend ol-popup-zoom">' +
-                                '<div onclick="zoomToCoords([' + coordinates + '])" title="Zoom para" class="input-group-text">' +
+                                '<div onclick="zoomToCoords([' + coords + '])" title="Zoom para" class="input-group-text">' +
                                     '<i class="fas fa-search-plus"></i>' +
                                 '</div>' +
                             '</div>' +
@@ -597,27 +616,25 @@ function identifyFeatures(features) {
     }
     // 1 feature
     else {
-        var geometry = features[0].getGeometry();
-        var type = geometry.getType();
-        var originalCoordinates;
+        var geom = features[0].getGeometry();
+        var id = features[0].getId();
+        var type = geom.getType();
+        var content = '';
 
-        if (type === 'Circle') {
-            originalCoordinates = geometry.getCenter();
-        }
-        else if (type === 'Polygon') {
-            flatCoordinates = geometry.getInteriorPoint().flatCoordinates
-            originalCoordinates = [flatCoordinates[0], flatCoordinates[1]];
-        }
-        else if (type === 'LineString') {
-            var extent = geometry.getExtent();
-            originalCoordinates = ol.extent.getCenter(extent);
-        }
-        else {
-            originalCoordinates = geometry.getCoordinates();
+        if (id) {
+            content =
+                '<div class="input-group">' +
+                    '<div class="input-group-prepend" title="Nome">' +
+                        '<div class="input-group-text">' +
+                            id +
+                        '</div>' +
+                    '</div>' +
+                    '<input type="text" value="' + features[0].get('name') + '" class="form-control">' +
+                '</div>';
         }
 
-        var coordinates = ol.proj.transform(originalCoordinates, 'EPSG:3857', 'EPSG:4326'); 
-        var formated = ol.coordinate.format(coordinates, '{x}, {y}', 3);
+        var coords = ol.proj.transform(getGeomCenter(geom), 'EPSG:3857', 'EPSG:4326'); 
+        var formated = ol.coordinate.format(coords, '{x}, {y}', 3);
 
         document.getElementById('popup').innerHTML =
             '<div class="ol-popup-actions">' +
@@ -626,9 +643,10 @@ function identifyFeatures(features) {
                 '</button>' +
             '</div>' +
             '<div class="ol-popup-content">' +
+                content +
                 '<div class="input-group">' +
                     '<div class="input-group-prepend ol-popup-zoom" title="Zoom para">' +
-                        '<div onclick="zoomToCoords([' + coordinates + '])" class="input-group-text">' +
+                        '<div onclick="zoomToCoords([' + coords + '])" class="input-group-text">' +
                             '<i class="fas fa-search-plus"></i>' +
                         '</div>' +
                     '</div>' +
@@ -652,6 +670,34 @@ function zoomToCoords(coordinates) {
     var coordinate = ol.proj.transform([lat, lon], 'EPSG:4326', 'EPSG:3857');
     popupOverlay.setPosition(coordinate);
     viewCenter(coordinate, 2000, 17);
+}
+
+function getGeomCenter(geom) {
+    var type = geom.getType();
+    var center;
+
+    switch (type) {
+        case 'Circle':
+            center = geom.getCenter();
+            break;
+        case 'Polygon':
+            var coords = geom.getInteriorPoint().flatCoordinates;
+            center = [coords[0], coords[1]];
+            break;
+        case 'MultiPolygon':
+            var coords = geom.getInteriorPoints().flatCoordinates;
+            center = [coords[0], coords[1]];
+            break;
+        case 'LineString':
+        case 'MultiLineString':
+            var extent = geom.getExtent();
+            center = ol.extent.getCenter(extent);
+            break;
+        default:
+            center = geom.getCoordinates();
+    }
+
+    return center;
 }
 
 // Selects
@@ -1119,8 +1165,56 @@ function exportFeatures(e) {
 }
 
 function importFeatures(e) {
-    var file = e.target.files[0]; // Captura o arquivo físico do campo
-    var ext = file.name.split('.').pop();
+    e.preventDefault();
+
+    var inputUrl = document.getElementById('importUrl');
+    var inputFile = document.getElementById('importFile');
+
+    if (inputUrl.value) {
+        inputFile.value = '';
+        importFeaturesFromUrl(inputUrl.value);
+    }
+    else {
+        inputUrl.value = '';
+        importFeaturesFromFile(inputFile.files[0]);
+    }
+}
+
+function importFeaturesFromUrl(url) {
+    var pattern = /^((http|https):\/\/)/;
+    
+    if (pattern.test(url)) {
+        var params = {
+            TILED: true
+        };
+        var paramsName = document.getElementsByClassName('import-param-name');
+        var i;
+
+        for (i = 0; i < paramsName.length; i++) {
+            var name = paramsName[i].value;
+            var value = document.getElementsByClassName('import-param-value')[i].value;
+
+            params[name] = value;
+        }
+
+        var source = new ol.source.TileWMS({
+            url: url,
+            params: params,
+            serverType: 'geoserver',
+            crossOrigin: 'anonymous'
+        });
+
+        var layer = new ol.layer.Tile({
+            source: source,
+            type: 'layer'
+        });
+
+        map.addLayer(layer);
+    }
+}
+
+function importFeaturesFromFile(file) {
+    var ext = file.name.split('.').pop(); // Captura a extensão do arquivo
     var reader = new FileReader(); // Inicia um leitor de arquivos
 
     reader.readAsDataURL(file); // Lê o arquivo
@@ -1135,7 +1229,31 @@ function importFeatures(e) {
         }
     }
 
-    e.target.value = '';
+    // Limpa o campo de arquivo
+    document.getElementById('importFile').value = '';
+}
+
+function addImportParam(e) {
+    e.stopPropagation();
+
+    var container = $('#importParams');
+    var param =
+        '<div class="input-group mb-1">' +
+            '<div onclick="removeImportParam(event, this)" class="input-group-append" title="Remover parâmetro" style="cursor: pointer;">' +
+                '<div class="input-group-text bg-danger text-white">' +
+                    '<i class="fas fa-times"></i>' +
+                '</div>' +
+            '</div>' +
+            '<input type="text" class="form-control import-param-name" placeholder="Nome">' +
+            '<input type="text" class="form-control import-param-value" placeholder="Valor">' +
+        '</div>';
+
+    container.append(param);
+}
+
+function removeImportParam(e, el) {
+    e.stopPropagation();
+    el.parentElement.remove();
 }
 
 function importGeojsonFeatures(result) {
@@ -1175,10 +1293,8 @@ function importGeojsonFeatures(result) {
 
                 measureTooltipElement.className = 'ol-tooltip ol-tooltip-static';
                 measureTooltipElement.innerHTML = output;
-
                 measureTooltip.setPosition(tooltipCoord);
                 measureTooltip.setOffset([0, -7]);
-
                 measureTooltipElement = null;
 
                 extent = measureSource.getExtent(); // Captura a extensão da fonte das medições
@@ -1199,6 +1315,16 @@ function importGeojsonFeatures(result) {
 
                 extent = markerSource.getExtent(); // Captura a extensão da fonte dos marcadores
             }
+            // Other sources
+            else {
+                var draw = new ol.format.GeoJSON().readFeature(feature);
+                
+                draw.getGeometry().transform('EPSG:4326', view.getProjection());
+
+                drawSource.addFeature(draw);
+
+                extent = drawSource.getExtent();
+            }
         });
 
         var lon = extent[(extent.length / 2)]; // Divide todas as coordenadas do array de extensão por 2
@@ -1207,10 +1333,6 @@ function importGeojsonFeatures(result) {
 
         viewCenter(center, 0, 7); // Centraliza a view nessas coordenadas, animação 0ms, zoom 7
     });
-}
-
-// TODO
-function importKmlFeatures(result) {
 }
 
 function deleteFeature() {
