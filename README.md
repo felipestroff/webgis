@@ -1,18 +1,11 @@
-# WebGIS
+# Openlayers WebGIS
 
-```TODO: Descrição do projeto```
+Aplicação sendo desenvolvida com base em estudos na biblioteca Openlayers.
 
-**Repositório**
-------------------------------
+**1. Tecnologias**
+------------------
 
-GitLab
-https://gitlab.com/fstroff/webgis
-
-**Tecnologias**
-------------------------------
-
-Core
-
+Core:
 - Openlayers 6.x
 - Bootstrap 4.x
 - Javascript
@@ -20,8 +13,7 @@ Core
 - HTML5
 - CSS3
 
-Bibliotecas
-
+Bibliotecas:
 - dom-to-image (https://github.com/tsayen/dom-to-image)
 - jsPDF (https://github.com/MrRio/jsPDF)
 - jQuery contextMenu (https://swisnl.github.io/jQuery-contextMenu)
@@ -29,13 +21,12 @@ Bibliotecas
 - Material Design Icons (https://material.io/resources/icons)
 - Font Awesome (https://fontawesome.com)
 
-**Funcionalidades**
-------------------------------
+**2. Funcionalidades**
+----------------------
 
 Sistema de Projeção: SIRGAS 2000 / WGS84 / EPSG:4326
 
-Desenvolvido
-
+Desenvolvido:
 - Zoom Slider
 - Mouse Position (coordinates)
 - Rotate (shift + drag)
@@ -44,7 +35,7 @@ Desenvolvido
 - Default Map View
 - Geolocation
 - Change Basemap
-    - None
+    - Blank/none
     - Bing Aerial
     - Bing Aerial With Labels
     - Bing Road
@@ -93,8 +84,7 @@ Desenvolvido
     - Measures
     - Markers
 
-Ideias
-
+Ideias:
 - Mapas bases da Esri e outros (Change Basemap)
 - Mais opções de mapas base (Overview Map)
 - Escala com mais opções (https://openlayers.org/en/latest/examples/scale-line.html)
@@ -102,18 +92,19 @@ Ideias
 - Lista de Camadas / Árvore de Arquivos
 - Exportar/Importar Camadas
 
-**BUGS**
+**3. BUGS**
+-----------
 
 - Não exporta feições com o tipo Círculo (Circle), atributo "GeometryCollection" vazio
 
-**Ambiente de Desenvolvimento**
-------------------------------
+**4. Ambiente de Desenvolvimento**
+----------------------------------
 
-A seguir as configurações de ambiente em desenvolvimento que foram testadas e homologadas pelo desenvolvedor:
+A seguir as configurações de ambiente em desenvolvimento que foram testadas e homologadas pelo desenvolvedor.
 
-Servidor de Aplicação
-- IIS (Windows)
-- WampServer (http://www.wampserver.com/en)
+Servidor de Aplicação:
+- IIS
+- Apache
 
 IDE
 - Visual Studio Code (https://code.visualstudio.com)
@@ -122,8 +113,7 @@ Navegador
 - Google Chrome
 - Mozilla Firefox
 
-Estrutura
-
+Estrutura:
 - ```fonts```: Diretório de fontes personalizadas
 - ```images```: Diretório de imagens
 - ```lib```: Diretório de bibliotecas externas
@@ -132,9 +122,4 @@ Estrutura
 - ```favicon.ico```: Ícone da aba do navegador
 - ```index.html```: Página e interface inicial
 - ```manifest.json```: Manifesto para Web Progressive App (https://developers.google.com/web/progressive-web-apps)
-- ```web.config```: Configurações locais dos servidores de aplicação
-
-**Ambiente de Produção**
-------------------------------
-
-```TODO```
+- ```web.config```: Configurações locais do IIS
