@@ -122,7 +122,6 @@ Estrutura:
 - ```favicon.ico```: Ícone da aba do navegador
 - ```index.html```: Página e interface inicial
 - ```manifest.json```: Metadados do aplicativo
-- ```web.config```: Configurações locais do IIS
 
 **Contato**
 -----------
