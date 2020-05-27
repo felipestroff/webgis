@@ -1,4 +1,4 @@
-# Openlayers WebGIS
+# OpenLayers WebGIS
 
 Aplicação sendo desenvolvida com base em estudos na biblioteca Openlayers.
 
