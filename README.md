@@ -121,5 +121,13 @@ Estrutura:
 - ```app.js```: Regras de negócio e funcionalidades front-end
 - ```favicon.ico```: Ícone da aba do navegador
 - ```index.html```: Página e interface inicial
-- ```manifest.json```: Manifesto para Web Progressive App (https://developers.google.com/web/progressive-web-apps)
+- ```manifest.json```: Metadados do aplicativo
 - ```web.config```: Configurações locais do IIS
+
+**Contato**
+-----------
+
+BUGS, sugestões e contato em geral
+- felipe@codexremote.com.br
+ou
+- stroff.felipe@gmail.com
