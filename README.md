@@ -1,6 +1,6 @@
 # OpenLayers WebGIS
 
-Aplicação sendo desenvolvida com base em estudos na biblioteca Openlayers.
+Aplicação webgis sendo desenvolvida com base em estudos na biblioteca Openlayers.
 
 **1. Tecnologias**
 ------------------
