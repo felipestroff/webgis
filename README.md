@@ -1,9 +1,9 @@
 # OpenLayers WebGIS
 
-Aplicação webgis sendo desenvolvida com base em estudos na biblioteca Openlayers.
+Webgis application being developed based on studies in the Openlayers library.
 
-**1. Tecnologias**
-------------------
+**1. Technology**
+-----------------
 
 Core:
 - Openlayers 6.x
@@ -13,7 +13,7 @@ Core:
 - HTML5
 - CSS3
 
-Bibliotecas:
+Libs:
 - dom-to-image (https://github.com/tsayen/dom-to-image)
 - jsPDF (https://github.com/MrRio/jsPDF)
 - jQuery contextMenu (https://swisnl.github.io/jQuery-contextMenu)
@@ -21,12 +21,12 @@ Bibliotecas:
 - Material Design Icons (https://material.io/resources/icons)
 - Font Awesome (https://fontawesome.com)
 
-**2. Funcionalidades**
+**2. Functionalities**
 ----------------------
 
-Sistema de Projeção: SIRGAS 2000 / WGS84 / EPSG:4326
+Projection System: SIRGAS 2000 / WGS84 / EPSG:4326
 
-Desenvolvido:
+Developed:
 - Zoom Slider
 - Mouse Position (coordinates)
 - Rotate (shift + drag)
@@ -84,45 +84,35 @@ Desenvolvido:
     - Measures
     - Markers
 
-Ideias:
-- Mapas bases da Esri e outros (Change Basemap)
-- Mais opções de mapas base (Overview Map)
-- Escala com mais opções (https://openlayers.org/en/latest/examples/scale-line.html)
-- Marcadores
-- Lista de Camadas / Árvore de Arquivos
-- Exportar/Importar Camadas
+Ideas:
+- Esri base maps and others (Change Basemap)
+- More base map options (Overview Map)
+- Scale with more options (https://openlayers.org/en/latest/examples/scale-line.html)
+- Bookmarks
+- Layer List / File Tree
+- Export / Import Layers
 
 **3. BUGS**
 -----------
 
-- Não exporta feições com o tipo Círculo (Circle), atributo "GeometryCollection" vazio
+- Does not export features with type Circle, empty "GeometryCollection" attribute
 
-**4. Ambiente de Desenvolvimento**
-----------------------------------
+**4. Development environment**
+------------------------------
 
-A seguir as configurações de ambiente em desenvolvimento que foram testadas e homologadas pelo desenvolvedor.
+Following are the configurations of the developing environment that have been tested and approved by the developer.
 
-Servidor de Aplicação:
+Application Server:
 - IIS
 - Apache
 
 IDE:
 - Visual Studio Code (https://code.visualstudio.com)
 
-Navegadores:
+Browsers:
 - Google Chrome
 - Mozilla Firefox
 
-Estrutura:
-- ```fonts```: Diretório de fontes personalizadas
-- ```images```: Diretório de imagens
-- ```lib```: Diretório de bibliotecas externas
-- ```styles```: Diretório de estilos
-- ```app.js```: Regras de negócio e funcionalidades front-end
-- ```favicon.ico```: Ícone da aba do navegador
-- ```index.html```: Página e interface inicial
-- ```manifest.json```: Metadados do aplicativo
-
-**Contato**
+**Contact**
 -----------
-Dúvidas mande um email para: stroff.felipe@gmail.com ou entre em contato pelo WhatsApp: <a href="https://api.whatsapp.com/send?phone=5551980392299&text=Olá%20Felipe,%20Estou%20com%20dúvidas%20sobre%20o%20sistema%20Controle%20de%20Estoque." target="_blank">Clique Aqui para mandar uma mensagem pelo WhatsApp</a>
+Questions send an email to: stroff.felipe@gmail.com or contact by WhatsApp: <a href="https://api.whatsapp.com/send?phone=5551980392299&text=Olá%20Felipe,%20Estou%20com%20dúvidas%20sobre%20a%20aplicação%20OpenLayers%20WebGIS." target="_blank">Click Here to send a message via WhatsApp</a>
