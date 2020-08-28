@@ -6,24 +6,17 @@ var center;
 var selectedLayer = null;
 
 // * Sources
-var drawSource = new ol.source.Vector({
-    wrapX: false
-});
-
+var drawSource = new ol.source.Vector();
 var geolocationSource = new ol.source.Vector();
-
 var measureSource = new ol.source.Vector();
-
 var markerSource = new ol.source.Vector();
 
 // * Interactions
 var select  = new ol.interaction.Select();
 var selectedFeatures = select.getFeatures();
-
 var modify = new ol.interaction.Modify({
     source: drawSource
 });
-
 var dragBox = new ol.interaction.DragBox();
 
 // * Overlays
@@ -35,7 +28,6 @@ var popupOverlay = new ol.Overlay({
         duration: 250
     }
 });
-
 var tooltipOverlay = new ol.Overlay({
     element: document.getElementById('tooltip'),
     offset: [0, -15],
@@ -43,7 +35,6 @@ var tooltipOverlay = new ol.Overlay({
     positioning: 'bottom-center',
     className: 'ol-tooltip'
 });
-
 var labelOverlay = new ol.Overlay({
     element: document.getElementById('labels'),
     offset: [0, -15],
@@ -57,7 +48,6 @@ var drawVector = new ol.layer.Vector({
     source: drawSource,
     zIndex: 1
 });
-
 var measureVector = new ol.layer.Vector({
     source: measureSource,
     zIndex: 1,
@@ -77,12 +67,10 @@ var measureVector = new ol.layer.Vector({
         })
     })
 });
-
 var geolocationVector = new ol.layer.Vector({
     source: geolocationSource,
     zIndex: 1
 });
-
 var markerVector = new ol.layer.Vector({
     source: markerSource,
     zIndex: 2
@@ -92,9 +80,9 @@ var markerVector = new ol.layer.Vector({
 var view = new ol.View({
     center: ol.proj.fromLonLat([-52, -31]),
     zoom: 7,
-    minZoom: 7,
-    maxZoom: 19,
-    constrainOnlyCenter: true
+    //minZoom: 7,
+    //maxZoom: 19,
+    //constrainOnlyCenter: true
 });
 
 // * Layers
@@ -201,6 +189,9 @@ $(document).ready(function() {
 
         return false;
     });
+
+    // Fecha a popup
+    closePopup();
 });
 
 $(function() {
@@ -1164,6 +1155,11 @@ function exportFeatures(e) {
     }
 }
 
+function onFileChange(e) {
+    document.getElementById('importUrl').value = '';
+    document.getElementById('importParams').innerHTML = '';
+}
+
 function importFeatures(e) {
     e.preventDefault();
 
@@ -1184,32 +1180,90 @@ function importFeaturesFromUrl(url) {
     var pattern = /^((http|https):\/\/)/;
     
     if (pattern.test(url)) {
-        var params = {
-            TILED: true
-        };
-        var paramsName = document.getElementsByClassName('import-param-name');
-        var i;
+        var featureServer = /FeatureServer/;
+        var mapServer = /MapServer/;
 
-        for (i = 0; i < paramsName.length; i++) {
-            var name = paramsName[i].value;
-            var value = document.getElementsByClassName('import-param-value')[i].value;
+        if (featureServer.test(url) || mapServer.test(url)) {
+            console.log('ArcGIS');
 
-            params[name] = value;
+            var params = {
+                returnGeometry: true,
+                inSR: 102100,
+                outSR: 102100,
+                geometryType: 'esriGeometryEnvelope',
+                spatialRel: 'esriSpatialRelIntersects',
+                outFields: '*',
+                f: 'json'
+            };
+            var paramsName = document.getElementsByClassName('import-param-name');
+            var i;
+    
+            for (i = 0; i < paramsName.length; i++) {
+                var name = paramsName[i].value;
+                var value = document.getElementsByClassName('import-param-value')[i].value;
+    
+                params[name] = value;
+            }
+
+            console.log('Params:', params);
+
+            axios.get(url + '/query', {params}).then(function (response) {
+                console.log(response);
+
+                if (response.data.error) {
+                    console.error(response.data.error);
+                    toastr.error(
+                        response.data.error.details + `<br> Código do erro: ${response.data.error.code}`,
+                        response.data.error.message
+                    )
+                }
+                else {
+                    // dataProjection will be read from document
+                    var features = new ol.format.EsriJSON().readFeatures(response, {
+                        //featureProjection: view.getProjection(),
+                    });
+
+                    console.log('Features:', features);
+
+                    if (features.length) {
+                        drawSource.addFeatures(features);
+                    }
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         }
+        else {
+            console.log('Other');
 
-        var source = new ol.source.TileWMS({
-            url: url,
-            params: params,
-            serverType: 'geoserver',
-            crossOrigin: 'anonymous'
-        });
-
-        var layer = new ol.layer.Tile({
-            source: source,
-            type: 'layer'
-        });
-
-        map.addLayer(layer);
+            var params = {
+                TILED: true
+            };
+            var paramsName = document.getElementsByClassName('import-param-name');
+            var i;
+    
+            for (i = 0; i < paramsName.length; i++) {
+                var name = paramsName[i].value;
+                var value = document.getElementsByClassName('import-param-value')[i].value;
+    
+                params[name] = value;
+            }
+    
+            var source = new ol.source.TileWMS({
+                url: url,
+                params: params,
+                serverType: 'geoserver',
+                crossOrigin: 'anonymous'
+            });
+    
+            var layer = new ol.layer.Tile({
+                source: source,
+                type: 'layer'
+            });
+    
+            map.addLayer(layer);
+        }
     }
 }
 
@@ -1218,16 +1272,17 @@ function importFeaturesFromFile(file) {
     var reader = new FileReader(); // Inicia um leitor de arquivos
 
     reader.readAsDataURL(file); // Lê o arquivo
-    reader.onload = readed; // Ao carregar arquivo, chama uma função  
+    reader.onload = function (data) {
+        console.log(data);
+        console.log(reader);
 
-    function readed() {
         if (ext === 'geojson') {
             importGeojsonFeatures(reader.result);
         }
         else if (ext === 'kml') {
             importKmlFeatures(reader.result);
         }
-    }
+    };
 
     // Limpa o campo de arquivo
     document.getElementById('importFile').value = '';
@@ -1327,11 +1382,33 @@ function importGeojsonFeatures(result) {
             }
         });
 
-        var lon = extent[(extent.length / 2)]; // Divide todas as coordenadas do array de extensão por 2
-        var lat = extent[(extent.length / 2) - 1]; // Divide todas as coordenadas do array de extensão por 2 e volta uma posição
-        var center = [lon, lat]; // Concatena a longitude com latitude em formato de coordenada [x, y]
+        //var lon = extent[(extent.length / 2)]; // Divide todas as coordenadas do array de extensão por 2
+        //var lat = extent[(extent.length / 2) - 1]; // Divide todas as coordenadas do array de extensão por 2 e volta uma posição
+        //var center = [lon, lat]; // Concatena a longitude com latitude em formato de coordenada [x, y]
 
-        viewCenter(center, 0, 7); // Centraliza a view nessas coordenadas, animação 0ms, zoom 7
+        //viewCenter(center, 0, 7); // Centraliza a view nessas coordenadas, animação 0ms, zoom 7
+    });
+}
+
+function importKmlFeatures(result) {
+    // Lê o resultado como JSON utilizando jQuery
+    $.get(result, function(data) {
+        console.log('[KML string]:', data);
+
+        var features = new ol.format.KML({
+            featureProjection: view.getProjection()
+        }).readFeatures(data);
+    
+        console.log('[KML features]:', features);
+
+        drawSource.addFeatures(features);
+    
+        //var extent = drawSource.getExtent();
+        //var lon = extent[(extent.length / 2)]; // Divide todas as coordenadas do array de extensão por 2
+        //var lat = extent[(extent.length / 2) - 1]; // Divide todas as coordenadas do array de extensão por 2 e volta uma posição
+        //var center = [lon, lat]; // Concatena a longitude com latitude em formato de coordenada [x, y]
+    
+        //viewCenter(center, 0, 7); // Centraliza a view nessas coordenadas, animação 0ms, zoom 7
     });
 }
 
@@ -1555,24 +1632,4 @@ function setGeometryIcon(type) {
             break;
     }
     return icon;
-}
-
-function ajaxRequest(type, url, data) {
-    return $.ajax({
-        type: type,
-        url: url,
-        data: data,
-        beforeSend: function (request) {
-            console.info('.. REQUESTING ..');
-            console.log(request);
-        },
-        success: function(response) {
-            console.info('* SUCCESS *');
-            console.log(response);
-        },
-        error: function(error) {
-            console.info('! ERROR !');
-            console.log(error);
-        }
-    });
 }

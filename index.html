@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="styles/bootstrap.css">
         <link rel="stylesheet" href="styles/jquery.contextMenu.css">
         <link rel="stylesheet" href="styles/material.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <link rel="stylesheet" href="styles/app.css">
     </head>
     <body>
@@ -39,6 +40,7 @@
                                     Importar
                                 </a>
                                 <form onsubmit="importFeatures(event)" class="dropdown-menu dropdown-form p-4">
+                                    <label for="importUrl">Importar via URL e parâmetros</label>
                                     <div class="input-group mb-2">
                                         <div onclick="addImportParam(event)" class="input-group-append" title="Adicionar parâmetro" style="cursor: pointer;">
                                           <div class="input-group-text">
@@ -49,13 +51,14 @@
                                     </div>
                                     <div id="importParams"></div>
                                     <div class="form-group mt-4">
-                                        <label for="importFile">Selecionar arquivo</label>
+                                        <label for="importFile">Importar selecionando arquivo</label>
                                         <input type="file" id="importFile" class="form-control-file" aria-describedby="importFileHelp"
-                                            accept="application/vnd.geo+json"
+                                            accept="application/vnd.geo+json,application/vnd.google-earth.kml+xml"
+                                            onchange="onFileChange(event)"
                                         >
-                                        <small id="importFileHelp" class="form-text text-muted">Formatos suportados: geojson</small>
+                                        <small id="importFileHelp" class="form-text text-muted">Formatos suportados: geojson, kml</small>
                                     </div>
-                                    <button onclick="importFeaturesFromUrl()" type="submit" class="btn btn-primary mt-2">Importar</button>
+                                    <button type="submit" class="btn btn-primary mt-2">Importar</button>
                                 </form>
                             </div>
                             <div class="dropdown-submenu">
@@ -324,6 +327,8 @@
         <script src="lib/jquery.ui.position.js"></script>
         <script src="lib/jquery.easyPaginate.js"></script>
         <script src="lib/font-awesome.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script src="app.js"></script>
     </body>
 </html>
